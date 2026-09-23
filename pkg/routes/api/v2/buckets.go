@@ -63,7 +63,7 @@ func RegisterBucketRoutes(api huma.API) {
 	Register(api, huma.Operation{
 		OperationID: "buckets-update",
 		Summary:     "Update a bucket of a kanban view",
-		Description: "Replaces a kanban bucket's title, limit and position. The bucket is identified by the URL, which also scopes it to the project and view. Requires write access to the project.",
+		Description: "Replaces a kanban bucket's title, limit, position and hex_color. Title is required; limit, position or hex_color left out of the body are reset, so an update without hex_color clears the color. The bucket is identified by the URL, which also scopes it to the project and view. Requires write access to the project.",
 		Method:      http.MethodPut,
 		Path:        "/projects/{project}/views/{view}/buckets/{bucket}",
 		Tags:        tags,

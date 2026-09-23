@@ -23,6 +23,7 @@ import (
 
 	"code.vikunja.io/api/pkg/log"
 	"code.vikunja.io/api/pkg/user"
+	"code.vikunja.io/api/pkg/utils"
 	"code.vikunja.io/api/pkg/web"
 	"xorm.io/xorm"
 )
@@ -33,6 +34,8 @@ type Bucket struct {
 	ID int64 `xorm:"bigint autoincr not null unique pk" json:"id" param:"bucket"`
 	// The title of this bucket.
 	Title string `xorm:"text not null" valid:"required" minLength:"1" json:"title"`
+	// The hex color of this bucket, without the leading #.
+	HexColor string `xorm:"varchar(6) null" json:"hex_color" valid:"runelength(0|7)" maxLength:"7" doc:"The hex color of this bucket, without the leading #. Empty means no color."`
 	// The project this bucket belongs to.
 	ProjectID int64 `xorm:"-" json:"-" param:"project"`
 	// The project view this bucket belongs to.
@@ -319,6 +322,7 @@ func (b *Bucket) Create(s *xorm.Session, a web.Auth) (err error) {
 	b.CreatedByID = b.CreatedBy.ID
 
 	b.ID = 0
+	b.HexColor = utils.NormalizeHex(b.HexColor)
 	_, err = s.Insert(b)
 	if err != nil {
 		return
@@ -346,12 +350,14 @@ func (b *Bucket) Create(s *xorm.Session, a web.Auth) (err error) {
 // @Failure 500 {object} models.Message "Internal error"
 // @Router /projects/{projectID}/views/{view}/buckets/{bucketID} [post]
 func (b *Bucket) Update(s *xorm.Session, _ web.Auth) (err error) {
+	b.HexColor = utils.NormalizeHex(b.HexColor)
 	_, err = s.
 		Where("id = ?", b.ID).
 		Cols(
 			"title",
 			"limit",
 			"position",
+			"hex_color",
 		).
 		Update(b)
 	return
