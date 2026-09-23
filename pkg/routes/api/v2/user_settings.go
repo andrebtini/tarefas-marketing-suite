@@ -48,6 +48,12 @@ type userAvatarProviderBody struct {
 	AvatarProvider string `json:"avatar_provider" doc:"The avatar provider. One of: gravatar (uses the user email), upload, initials, marble (random per user), ldap (synced from LDAP), openid (synced from OpenID), default."`
 }
 
+// No maxLength tag: the limit applies after trimming, so the model checks it.
+// Required so that a body without the field cannot silently clear the title.
+type userJobTitleBody struct {
+	JobTitle string `json:"job_title" required:"true" doc:"The job title shown under the user's name. Surrounding whitespace is trimmed and at most 100 characters may remain. An empty string clears it."`
+}
+
 type userActionMessageBody struct {
 	Message string `json:"message" readOnly:"true" doc:"A confirmation message."`
 }
@@ -137,6 +143,15 @@ func RegisterUserSettingsRoutes(api huma.API) {
 		Path:        "/user/settings/avatar/provider",
 		Tags:        tags,
 	}, userSetAvatarProvider)
+
+	Register(api, huma.Operation{
+		OperationID: "user-set-job-title",
+		Summary:     "Set the current user's job title",
+		Description: "Sets the job title shown under the authenticated user's name to everyone who can see the user. It always targets the caller: nobody can set another user's job title. Fails with 422 when more than 100 characters remain after trimming. Not available to link shares (403) or API tokens.",
+		Method:      http.MethodPut,
+		Path:        "/user/settings/job-title",
+		Tags:        tags,
+	}, userSetJobTitle)
 
 	Register(api, huma.Operation{
 		OperationID: "user-timezones",
@@ -307,6 +322,39 @@ func userSetAvatarProvider(ctx context.Context, in *struct {
 	}
 
 	return &singleBody[userAvatarProviderBody]{Body: &userAvatarProviderBody{AvatarProvider: u.AvatarProvider}}, nil
+}
+
+func userSetJobTitle(ctx context.Context, in *struct {
+	Body userJobTitleBody
+}) (*singleBody[userJobTitleBody], error) {
+	a, err := authFromCtx(ctx)
+	if err != nil {
+		return nil, err
+	}
+	doer, err := user.GetFromAuth(a)
+	if err != nil {
+		return nil, translateDomainError(err)
+	}
+
+	s := db.NewSession()
+	defer s.Close()
+
+	u, err := user.GetUserByID(s, doer.ID)
+	if err != nil {
+		_ = s.Rollback()
+		return nil, translateDomainError(err)
+	}
+
+	if err := models.UpdateUserJobTitle(s, u, in.Body.JobTitle); err != nil {
+		_ = s.Rollback()
+		return nil, translateDomainError(err)
+	}
+
+	if err := s.Commit(); err != nil {
+		return nil, translateDomainError(err)
+	}
+
+	return &singleBody[userJobTitleBody]{Body: &userJobTitleBody{JobTitle: u.JobTitle}}, nil
 }
 
 type timezonesBody struct {
