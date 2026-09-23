@@ -61,6 +61,8 @@ type Bucket struct {
 	// Including the task collection type so we can use task filters on kanban
 	TaskCollection `xorm:"-" json:"-"`
 
+	withCount bool `xorm:"-" json:"-"`
+
 	web.Permissions `xorm:"-" json:"-"`
 	web.CRUDable    `xorm:"-" json:"-"`
 }
@@ -149,6 +151,13 @@ func (b *Bucket) ReadAll(s *xorm.Session, auth web.Auth, _ string, _ int, _ int)
 	for _, bb := range buckets {
 		if createdBy, has := users[bb.CreatedByID]; has {
 			bb.CreatedBy = createdBy
+		}
+	}
+
+	if b.withCount {
+		err = addTaskCountsToBuckets(s, auth, view, buckets)
+		if err != nil {
+			return nil, 0, 0, err
 		}
 	}
 

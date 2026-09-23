@@ -45,7 +45,7 @@ func RegisterBucketRoutes(api huma.API) {
 	Register(api, huma.Operation{
 		OperationID: "buckets-list",
 		Summary:     "List the buckets of a kanban view",
-		Description: "Returns all kanban buckets of a project view, ordered by position. Requires read access to the project. The list is not paginated by the server but is returned in the standard list envelope. To get the buckets together with their tasks, use the buckets/tasks endpoint instead.",
+		Description: "Returns all kanban buckets of a project view, ordered by position. Requires read access to the project. The list is not paginated by the server but is returned in the standard list envelope. To get the buckets together with their tasks, use the buckets/tasks endpoint instead. With with_count=true every bucket's count holds the number of tasks the kanban board shows in it (view filter and permissions applied), without returning the tasks; only views in manual bucket mode are counted. Without it count is always 0.",
 		Method:      http.MethodGet,
 		Path:        "/projects/{project}/views/{view}/buckets",
 		Tags:        tags,
@@ -84,13 +84,18 @@ func init() { AddRouteRegistrar(RegisterBucketRoutes) }
 func bucketsList(ctx context.Context, in *struct {
 	ProjectID int64 `path:"project"`
 	ViewID    int64 `path:"view"`
+	WithCount bool  `query:"with_count" doc:"If true, fill each bucket's count with the number of tasks the kanban board shows in it, without returning the tasks."`
 	ListParams
 }) (*bucketListBody, error) {
 	a, err := authFromCtx(ctx)
 	if err != nil {
 		return nil, err
 	}
-	result, _, total, err := handler.DoReadAll(ctx, &models.Bucket{ProjectID: in.ProjectID, ProjectViewID: in.ViewID}, a, in.Q, in.Page, in.PerPage)
+	b := &models.Bucket{ProjectID: in.ProjectID, ProjectViewID: in.ViewID}
+	if in.WithCount {
+		b.SetWithCount()
+	}
+	result, _, total, err := handler.DoReadAll(ctx, b, a, in.Q, in.Page, in.PerPage)
 	if err != nil {
 		return nil, translateDomainError(err)
 	}
