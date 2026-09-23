@@ -18,6 +18,8 @@ package models
 
 import (
 	"context"
+	"strings"
+	"unicode/utf8"
 
 	"code.vikunja.io/api/pkg/modules/avatar"
 	"code.vikunja.io/api/pkg/user"
@@ -133,4 +135,20 @@ func UpdateUserAvatarProvider(s *xorm.Session, u *user.User, provider string) er
 		avatar.FlushAllCaches(u)
 	}
 	return nil
+}
+
+// Same limit as the varchar(100) job_title column, which MySQL and PostgreSQL count in characters.
+const userJobTitleMaxLength = 100
+
+// UpdateUserJobTitle stores the user's own job title, trimmed; an empty title clears it.
+// Only job_title is written: UpdateUser never touches the column, so the two cannot clobber each other.
+func UpdateUserJobTitle(s *xorm.Session, u *user.User, jobTitle string) error {
+	jobTitle = strings.TrimSpace(jobTitle)
+	if utf8.RuneCountInString(jobTitle) > userJobTitleMaxLength {
+		return InvalidFieldError([]string{"job_title"})
+	}
+
+	u.JobTitle = jobTitle
+	_, err := s.ID(u.ID).Cols("job_title").Update(u)
+	return err
 }

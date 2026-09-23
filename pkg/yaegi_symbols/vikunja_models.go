@@ -392,6 +392,7 @@ func init() {
 		"UpdateSessionLastActive":                          reflect.ValueOf(models.UpdateSessionLastActive),
 		"UpdateUserAvatarProvider":                         reflect.ValueOf(models.UpdateUserAvatarProvider),
 		"UpdateUserGeneralSettings":                        reflect.ValueOf(models.UpdateUserGeneralSettings),
+		"UpdateUserJobTitle":                               reflect.ValueOf(models.UpdateUserJobTitle),
 		"UploadTaskAttachments":                            reflect.ValueOf(models.UploadTaskAttachments),
 		"ValidateTokenAndGetOwner":                         reflect.ValueOf(models.ValidateTokenAndGetOwner),
 		"VerifyLinkSharePassword":                          reflect.ValueOf(models.VerifyLinkSharePassword),
