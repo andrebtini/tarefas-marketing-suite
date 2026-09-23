@@ -1,3 +1,5 @@
+> **Fork da Marketing Suite.** Este é o gerenciador de tarefas interno da Marketing Suite, baseado no Vikunja e sob a mesma licença AGPL-3.0. O que mudou, como a imagem é gerada e como atualizar estão em [MARKETING-SUITE.md](MARKETING-SUITE.md). O README original do Vikunja segue abaixo.
+
 <img src="https://vikunja.io/images/vikunja-logo.svg" alt="" style="display: block;width: 50%;margin: 0 auto;" width="50%"/>
 
 [![Build Status](https://github.com/go-vikunja/vikunja/actions/workflows/ci.yml/badge.svg)](https://github.com/go-vikunja/vikunja/actions/workflows/ci.yml)
