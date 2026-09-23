@@ -1,0 +1,26 @@
+name: Testes MS
+
+# O fork tirou o ci.yml do Vikunja, que era quem chamava o test.yml. Este chama o mesmo test.yml,
+# sem mudanca, nos ramos da casa: em todo push de ramo feat-ms-* ou fix-ms-*, em pedido de merge
+# para o marketing-suite e a mao, pela aba Actions.
+on:
+  push:
+    branches:
+      - 'feat-ms-*'
+      - 'fix-ms-*'
+  pull_request:
+    branches:
+      - marketing-suite
+  workflow_dispatch:
+
+# Um push novo no mesmo ramo cancela a rodada anterior, que ja ficou velha.
+concurrency:
+  group: testes-ms-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  testes:
+    uses: ./.github/workflows/test.yml
