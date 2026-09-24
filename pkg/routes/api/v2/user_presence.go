@@ -29,7 +29,7 @@ import (
 )
 
 type userPresenceBody struct {
-	UserIDs []int64 `json:"user_ids" readOnly:"true" doc:"Ids of the online users who share at least one project or one team with you, ascending. Never includes your own id. A user stays online for 30 seconds after their last websocket connection closed."`
+	UserIDs []int64 `json:"user_ids" readOnly:"true" doc:"Ids of the online users you work with, ascending. Never includes your own id. A user stays online for 30 seconds after their last websocket connection closed."`
 }
 
 // RegisterUserPresenceRoutes mounts the presence snapshot only when
@@ -43,7 +43,7 @@ func RegisterUserPresenceRoutes(api huma.API) {
 	Register(api, huma.Operation{
 		OperationID: "user-presence",
 		Summary:     "List the online users you work with",
-		Description: "Returns who is online right now among the users who share at least one project (as owner, through a direct share or through a team share, inherited from a parent project included) or one team with you. Meant for the initial load: after it, the websocket event user.presence carries every change. Not available to link shares (403) or API tokens.",
+		Description: "Returns who is online right now among the users you work with: the members of your teams and, on every project you reach, the users its user list shows you (owners and direct shares, and the members of teams shared on it where you are a project admin; grants on parent projects included). Meant for the initial load: after it, the websocket event user.presence carries each user going online or offline, but not changes to who shares what, so request this again after every websocket reconnect and whenever projects or teams are shared or unshared. Apply the user.presence events that arrive while this request is in flight on top of its result, in the order they arrived. Not available to link shares (403) or API tokens.",
 		Method:      http.MethodGet,
 		Path:        "/user/presence",
 		Tags:        []string{"user"},
