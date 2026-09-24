@@ -348,3 +348,42 @@ func TestPresenceReachesOnlyUsersWhoShareSomething(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, []int64{2}, ids)
 }
+
+// Fixtures: on project 29 user12 has a direct write share, user13 a direct admin
+// share, and user8 comes in through team 11. The project's user list shows team
+// members only to its admins, and presence follows it.
+func TestPresenceFollowsTheProjectUserList(t *testing.T) {
+	s := setupNotificationListenerTest(t)
+	clock := &fakeClock{}
+	h := newPresenceHub(clock, nil)
+
+	writer := presenceConn(12, true)
+	admin := presenceConn(13, true)
+	h.Register(writer)
+	waitPresenceDelivered(t, h)
+	h.Register(admin)
+	waitPresenceDelivered(t, h)
+	assert.Equal(t, []OutgoingMessage{presenceMessage(13, true)}, receivedPresence(writer))
+
+	teamMember := presenceConn(8, true)
+	h.Register(teamMember)
+	waitPresenceDelivered(t, h)
+	assert.Equal(t, []OutgoingMessage{presenceMessage(8, true)}, receivedPresence(admin))
+	assert.Empty(t, receivedPresence(writer), "user12 does not administer project 29, so team 11 stays hidden from it")
+
+	ids, err := h.OnlineUserIDsVisibleTo(s, 12)
+	require.NoError(t, err)
+	assert.Equal(t, []int64{13}, ids)
+	ids, err = h.OnlineUserIDsVisibleTo(s, 13)
+	require.NoError(t, err)
+	assert.Equal(t, []int64{8, 12}, ids)
+	ids, err = h.OnlineUserIDsVisibleTo(s, 8)
+	require.NoError(t, err)
+	assert.Equal(t, []int64{12, 13}, ids, "the team member still sees the direct shares")
+
+	h.Unregister(teamMember)
+	clock.elapse()
+	waitPresenceDelivered(t, h)
+	assert.Equal(t, []OutgoingMessage{presenceMessage(8, false)}, receivedPresence(admin))
+	assert.Empty(t, receivedPresence(writer))
+}

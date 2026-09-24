@@ -28,8 +28,8 @@ import (
 	"xorm.io/xorm"
 )
 
-// PresenceEvent tells a user that someone who shares a project or a team with
-// them came online or went offline. It only exists with service.ms.presence on.
+// PresenceEvent tells a user that someone models.GetUserIDsVisibleTo gives them
+// came online or went offline. It only exists with service.ms.presence on.
 const PresenceEvent = "user.presence"
 
 // A page reload closes the last connection and opens a new one a moment later;
@@ -162,8 +162,8 @@ func (p *presence) onlineUserIDs(except int64) []int64 {
 	return ids
 }
 
-// deliverPresence pushes a change to the connected users who share a project or
-// a team with its user. Nobody else connected means no query at all.
+// deliverPresence pushes a change to the connected users who may see its user.
+// Nobody else connected means no query at all.
 func (h *Hub) deliverPresence(change PresenceChange) {
 	viewers := h.connectedUserIDs(change.UserID)
 	if len(viewers) == 0 {
@@ -173,13 +173,24 @@ func (h *Hub) deliverPresence(change PresenceChange) {
 	s := db.NewSession()
 	defer s.Close()
 
+	// Seeing someone takes sharing something with them, and sharing is symmetric,
+	// so one query set for the user rules out every unrelated viewer before
+	// resolving what each remaining viewer may see.
 	sharing, err := models.GetUserIDsSharingProjectOrTeam(s, change.UserID)
 	if err != nil {
 		log.Errorf("WebSocket: could not resolve who may see the presence of user %d: %v", change.UserID, err)
 		return
 	}
 	for _, viewerID := range viewers {
-		if sharing[viewerID] {
+		if !sharing[viewerID] {
+			continue
+		}
+		visible, err := models.GetUserIDsVisibleTo(s, viewerID)
+		if err != nil {
+			log.Errorf("WebSocket: could not resolve whom user %d may see: %v", viewerID, err)
+			continue
+		}
+		if visible[change.UserID] {
 			h.PublishForUser(viewerID, PresenceEvent, change)
 		}
 	}
@@ -198,10 +209,10 @@ func (h *Hub) connectedUserIDs(except int64) []int64 {
 	return ids
 }
 
-// OnlineUserIDsVisibleTo returns, sorted, the online users who share a project
-// or a team with viewerID, the viewer itself never included. A user whose last
-// connection closed less than the grace period ago still counts as online. The
-// list is always empty on a hub that does not track presence.
+// OnlineUserIDsVisibleTo returns, sorted, the online users among those
+// models.GetUserIDsVisibleTo gives for viewerID, the viewer itself never included.
+// A user whose last connection closed less than the grace period ago still counts
+// as online. The list is always empty on a hub that does not track presence.
 func (h *Hub) OnlineUserIDsVisibleTo(s *xorm.Session, viewerID int64) ([]int64, error) {
 	ids := []int64{}
 	if h == nil || h.presence == nil {
@@ -213,12 +224,12 @@ func (h *Hub) OnlineUserIDsVisibleTo(s *xorm.Session, viewerID int64) ([]int64, 
 		return ids, nil
 	}
 
-	sharing, err := models.GetUserIDsSharingProjectOrTeam(s, viewerID)
+	visible, err := models.GetUserIDsVisibleTo(s, viewerID)
 	if err != nil {
 		return nil, err
 	}
 	for _, id := range online {
-		if sharing[id] {
+		if visible[id] {
 			ids = append(ids, id)
 		}
 	}
