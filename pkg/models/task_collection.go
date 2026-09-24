@@ -64,6 +64,10 @@ type TaskCollection struct {
 	// former sets this so a kanban view path still yields tasks.
 	forceFlatTasks bool
 
+	// countOnly runs the same queries as a normal read but only counts the
+	// tasks, so the bucket list can report the kanban's numbers without the rows.
+	countOnly bool
+
 	web.CRUDable    `xorm:"-" json:"-"`
 	web.Permissions `xorm:"-" json:"-"`
 }
@@ -164,7 +168,8 @@ func (tf *TaskCollection) SetForceFlatTasks() {
 }
 
 func getTaskOrTasksInBuckets(s *xorm.Session, a web.Auth, projects []*Project, view *ProjectView, opts *taskSearchOptions, filteringForBucket, forceFlatTasks bool) (tasks interface{}, resultCount int, totalItems int64, err error) {
-	if view != nil && GetSavedFilterIDFromProjectID(view.ProjectID) > 0 {
+	// Positions only order the tasks; a count neither needs them nor should write.
+	if view != nil && GetSavedFilterIDFromProjectID(view.ProjectID) > 0 && !opts.countOnly {
 		err = ensureTaskPositionsForSavedFilterView(s, a, projects, view, opts)
 		if err != nil {
 			return nil, 0, 0, err
@@ -304,6 +309,7 @@ func (tf *TaskCollection) ReadAll(s *xorm.Session, a web.Auth, search string, pa
 		tc.isSavedFilter = true
 		tc.Expand = tf.Expand
 		tc.forceFlatTasks = tf.forceFlatTasks
+		tc.countOnly = tf.countOnly
 
 		if tf.Filter != "" {
 			if tc.Filter != "" {
@@ -372,6 +378,7 @@ func (tf *TaskCollection) ReadAll(s *xorm.Session, a web.Auth, search string, pa
 	opts.perPage = perPage
 	opts.expand = tf.Expand
 	opts.isSavedFilter = tf.isSavedFilter
+	opts.countOnly = tf.countOnly
 
 	if view != nil {
 		var hasOrderByPosition bool

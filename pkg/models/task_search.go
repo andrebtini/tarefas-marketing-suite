@@ -670,6 +670,11 @@ func (d *dbTaskSearcher) Search(opts *taskSearchOptions) (tasks []*Task, totalCo
 		cond = builder.And(cond, subtaskRootCond)
 	}
 
+	if opts.countOnly {
+		totalCount, err = d.countTasks(cond, joinTaskBuckets, needsDistinct, opts.projectViewID)
+		return nil, totalCount, err
+	}
+
 	query := d.s.Where(cond)
 	switch {
 	case rankByRelevance:
@@ -730,12 +735,20 @@ func (d *dbTaskSearcher) Search(opts *taskSearchOptions) (tasks []*Task, totalCo
 		tasks = append(tasks, subtasks...)
 	}
 
+	totalCount, err = d.countTasks(cond, joinTaskBuckets, needsDistinct, opts.projectViewID)
+	if err != nil {
+		return nil, 0, err
+	}
+	return
+}
+
+func (d *dbTaskSearcher) countTasks(cond builder.Cond, joinTaskBuckets, needsDistinct bool, projectViewID int64) (int64, error) {
 	queryCount := d.s.Where(cond)
 	if joinTaskBuckets {
 		joinCond := "task_buckets.task_id = tasks.id"
-		if opts.projectViewID > 0 {
+		if projectViewID > 0 {
 			joinCond += " AND task_buckets.project_view_id = ?"
-			queryCount = queryCount.Join("LEFT", "task_buckets", joinCond, opts.projectViewID)
+			queryCount = queryCount.Join("LEFT", "task_buckets", joinCond, projectViewID)
 		} else {
 			queryCount = queryCount.Join("LEFT", "task_buckets", joinCond)
 		}
@@ -744,12 +757,12 @@ func (d *dbTaskSearcher) Search(opts *taskSearchOptions) (tasks []*Task, totalCo
 	if needsDistinct {
 		countCol = "count(DISTINCT tasks.id)"
 	}
-	totalCount, err = queryCount.
+	totalCount, err := queryCount.
 		Select(countCol).
 		Count(&Task{})
 	if err != nil {
 		sql, vals := queryCount.LastSQL()
-		return nil, 0, fmt.Errorf("could not fetch task count, error was '%w', sql: '%v', values: %v", err, sql, vals)
+		return 0, fmt.Errorf("could not fetch task count, error was '%w', sql: '%v', values: %v", err, sql, vals)
 	}
-	return
+	return totalCount, nil
 }

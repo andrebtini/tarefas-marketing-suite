@@ -240,6 +240,9 @@ type taskSearchOptions struct {
 	// userProvidedSort distinguishes an explicit sort_by from the id/position
 	// defaults appended later, so relevance ordering only replaces the default sort.
 	userProvidedSort bool
+
+	// countOnly makes Search return only the total, without loading any task.
+	countOnly bool
 }
 
 // ReadAll is a dummy function to still have that endpoint documented

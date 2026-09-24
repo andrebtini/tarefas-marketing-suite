@@ -69,6 +69,8 @@ type Bucket struct {
 	// write the color, so a v1 client that leaves it out cannot clear it.
 	writeHexColor bool `xorm:"-"`
 
+	withCount bool `xorm:"-" json:"-"`
+
 	web.Permissions `xorm:"-" json:"-"`
 	web.CRUDable    `xorm:"-" json:"-"`
 }
@@ -163,6 +165,13 @@ func (b *Bucket) ReadAll(s *xorm.Session, auth web.Auth, _ string, _ int, _ int)
 	for _, bb := range buckets {
 		if createdBy, has := users[bb.CreatedByID]; has {
 			bb.CreatedBy = createdBy
+		}
+	}
+
+	if b.withCount {
+		err = addTaskCountsToBuckets(s, auth, view, buckets)
+		if err != nil {
+			return nil, 0, 0, err
 		}
 	}
 
