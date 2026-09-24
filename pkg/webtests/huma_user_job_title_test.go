@@ -19,6 +19,7 @@ package webtests
 import (
 	"encoding/json"
 	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 
@@ -159,6 +160,22 @@ func TestHumaUserJobTitle(t *testing.T) {
 		rec := humaRequest(t, e, http.MethodPut, humaJobTitlePath, `{"job_title":"Robot"}`, jobTitleAPITokenUser1, "")
 		assert.Equal(t, http.StatusUnauthorized, rec.Code, "body: %s", rec.Body.String())
 		db.AssertExists(t, "users", map[string]interface{}{"id": 1, "job_title": ""}, false)
+
+		// The fixture token only holds tasks permissions, so the 401 above would not
+		// notice the route becoming grantable. No grantable permission may cover it,
+		// so even a token holding every one of them must be refused.
+		everything := models.APIPermissions{}
+		for group, perms := range models.GetAPITokenRoutes() {
+			for perm, route := range perms {
+				assert.NotEqualf(t, humaJobTitlePath, route.Path, "%s.%s makes the job title route grantable", group, perm)
+				everything[group] = append(everything[group], perm)
+			}
+		}
+		require.NotEmpty(t, everything)
+		for _, method := range []string{http.MethodPut, http.MethodPatch} {
+			c := e.NewContext(httptest.NewRequest(method, humaJobTitlePath, nil), httptest.NewRecorder())
+			assert.Falsef(t, models.CanDoAPIRoute(c, &models.APIToken{APIPermissions: everything}), "%s must not be allowed for any API token", method)
+		}
 	})
 
 	t.Run("Unauthenticated", func(t *testing.T) {
