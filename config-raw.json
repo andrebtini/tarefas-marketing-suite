@@ -162,6 +162,17 @@
                     "key": "trustedproxies",
                     "default_value": "",
                     "comment": "Comma-separated list of CIDR ranges for trusted reverse proxies. Only used when service.ipextractionmethod is 'xff' or 'realip'. With 'xff', X-Forwarded-For is only trusted when the request comes from one of these addresses; with 'realip', the X-Real-IP value itself must be within these ranges. Example: '127.0.0.1/32,::1/128,10.0.0.0/8,172.16.0.0/12'"
+                },
+                {
+                    "key": "ms",
+                    "comment": "Marketing Suite additions. Not part of upstream Vikunja.",
+                    "children": [
+                        {
+                            "key": "presence",
+                            "default_value": "false",
+                            "comment": "Shows who is online to the people they work with. When enabled, the websocket pushes the user.presence event and GET /api/v2/user/presence lists the online users, both limited to the members of their teams and, on the projects they reach, the users the project user list shows them (members of a shared team only to project admins). A user counts as online while they have an open websocket connection and for 30 seconds after the last one closes, so a page reload does not flicker. When disabled, nothing is tracked, the event cannot be subscribed to and the route is not mounted."
+                        }
+                    ]
                 }
             ]
         },

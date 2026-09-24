@@ -26,6 +26,8 @@ import (
 type Hub struct {
 	mu          sync.RWMutex
 	connections map[int64][]*Connection // userID -> connections
+	// nil unless service.ms.presence is on, so a disabled instance tracks nothing.
+	presence *presence
 }
 
 // NewHub creates a new Hub.
@@ -40,6 +42,10 @@ func (h *Hub) Register(conn *Connection) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 	h.connections[conn.userID] = append(h.connections[conn.userID], conn)
+	// Recorded under the hub lock so presence follows the real connection order.
+	if h.presence != nil && len(h.connections[conn.userID]) == 1 {
+		h.presence.connected(conn.userID)
+	}
 	log.Debugf("WebSocket: registered connection for user %d (total: %d)", conn.userID, len(h.connections[conn.userID]))
 }
 
@@ -48,15 +54,20 @@ func (h *Hub) Unregister(conn *Connection) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 	conns := h.connections[conn.userID]
+	removed := false
 	for i, c := range conns {
 		if c == conn {
 			h.connections[conn.userID] = append(conns[:i], conns[i+1:]...)
+			removed = true
 			break
 		}
 	}
 	remaining := len(h.connections[conn.userID])
 	if remaining == 0 {
 		delete(h.connections, conn.userID)
+		if removed && h.presence != nil {
+			h.presence.disconnected(conn.userID)
+		}
 	}
 	log.Debugf("WebSocket: unregistered connection for user %d (remaining: %d)", conn.userID, remaining)
 }

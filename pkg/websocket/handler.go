@@ -32,6 +32,9 @@ var globalHub *Hub
 // InitHub creates the global hub. Must be called once at startup.
 func InitHub() {
 	globalHub = NewHub()
+	if config.ServiceMSPresence.GetBool() {
+		globalHub.presence = newPresence(globalHub.deliverPresence)
+	}
 }
 
 // GetHub returns the global hub.

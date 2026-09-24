@@ -193,6 +193,8 @@ func init() {
 		"GetUserDataExportFile":                            reflect.ValueOf(models.GetUserDataExportFile),
 		"GetUserDataExportStatus":                          reflect.ValueOf(models.GetUserDataExportStatus),
 		"GetUserDirectedWebhookEvents":                     reflect.ValueOf(models.GetUserDirectedWebhookEvents),
+		"GetUserIDsSharingProjectOrTeam":                   reflect.ValueOf(models.GetUserIDsSharingProjectOrTeam),
+		"GetUserIDsVisibleTo":                              reflect.ValueOf(models.GetUserIDsVisibleTo),
 		"GetUserOrLinkShareUser":                           reflect.ValueOf(models.GetUserOrLinkShareUser),
 		"HashSessionToken":                                 reflect.ValueOf(models.HashSessionToken),
 		"HashToken":                                        reflect.ValueOf(models.HashToken),
