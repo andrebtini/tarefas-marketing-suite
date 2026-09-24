@@ -25,7 +25,7 @@
 
 .table.has-actions {
 	border-block-start: 1px solid var(--grey-100);
-	border-radius: 4px;
+	border-radius: $radius;
 	overflow: hidden;
 
 	td {

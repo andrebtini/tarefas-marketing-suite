@@ -83,21 +83,21 @@ const variantClass = computed<string>(() => VARIANT_CLASS_MAP[props.variant])
 	text-align: center;
 	white-space: var(--button-white-space);
 
-	// Custom styles
+	// Custom styles: sentence case and flat, as in the Marketing Suite reference
 	transition: all $transition;
 	border: 0;
-	text-transform: uppercase;
-	font-size: 0.85rem;
-	font-weight: bold;
+	font-size: 0.875rem;
+	font-weight: 600;
 	block-size: auto;
 	min-block-size: $button-height;
-	box-shadow: var(--shadow-sm);
+	box-shadow: none;
 	line-height: 1;
-	padding-inline: .5rem;
-	gap: .25rem;
+	padding-inline: .75rem;
+	gap: .5rem;
 
-	// Default/Primary variant colors
-	background-color: var(--primary);
+	// Default/Primary variant colors. --ms-primary-fill keeps white text at AA in dark mode,
+	// where --primary turns into the lighter #5b8dff.
+	background-color: var(--ms-primary-fill);
 	color: var(--button-text-color);
 	border-radius: $radius;
 
@@ -106,7 +106,6 @@ const variantClass = computed<string>(() => VARIANT_CLASS_MAP[props.variant])
 	}
 
 	&:hover {
-		box-shadow: var(--shadow-md);
 		background-color: var(--primary-dark, color-mix(in srgb, var(--primary) 85%, black));
 	}
 
@@ -121,7 +120,8 @@ const variantClass = computed<string>(() => VARIANT_CLASS_MAP[props.variant])
 	&:active,
 	&:focus,
 	&:focus:not(:active) {
-		box-shadow: var(--shadow-xs) !important;
+		// Flat in every state: the outline above stays the only focus indicator
+		box-shadow: none !important;
 	}
 
 	&[disabled] {
@@ -136,7 +136,7 @@ const variantClass = computed<string>(() => VARIANT_CLASS_MAP[props.variant])
 
 	// Primary variant (default, explicit)
 	&.is-primary {
-		background-color: var(--primary);
+		background-color: var(--ms-primary-fill);
 		color: var(--button-text-color);
 
 		&:hover {
@@ -144,13 +144,15 @@ const variantClass = computed<string>(() => VARIANT_CLASS_MAP[props.variant])
 		}
 	}
 
-	// Secondary/Outlined variant
+	// Secondary/Outlined variant: surface with a 1px border; on hover only the border darkens
 	&.is-outlined {
-		background-color: var(--scheme-main);
-		color: var(--grey-900);
+		background-color: var(--ms-surface);
+		color: var(--text);
+		border: 1px solid var(--ms-border-strong);
+		font-weight: 500;
 
 		&:hover {
-			color: var(--grey-600);
+			border-color: var(--ms-text-subtle);
 		}
 	}
 
@@ -161,7 +163,7 @@ const variantClass = computed<string>(() => VARIANT_CLASS_MAP[props.variant])
 		box-shadow: none;
 
 		&:hover {
-			background-color: var(--grey-100);
+			background-color: var(--ms-hover);
 			box-shadow: none;
 		}
 	}

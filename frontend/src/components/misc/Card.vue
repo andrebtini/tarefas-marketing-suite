@@ -69,10 +69,11 @@ defineEmits<{
 <style lang="scss" scoped>
 .card {
 	background-color: var(--white);
-	border-radius: $radius;
+	border-radius: $radius-large;
 	margin-block-end: 1rem;
+	// Flat card: the 1px border separates it from the board, no resting shadow.
+	// The shadow prop and .has-no-shadow stay for API compatibility.
 	border: 1px solid var(--card-border-color);
-	box-shadow: var(--shadow-sm);
 	color: var(--text);
 	max-inline-size: 100%;
 	position: relative;
@@ -89,7 +90,7 @@ defineEmits<{
 	display: flex;
 	box-shadow: none;
 	border-inline-end: 1px solid var(--card-border-color);
-	border-radius: $radius $radius 0 0;
+	border-radius: $radius-large $radius-large 0 0;
 }
 
 .card-header-title {
@@ -97,7 +98,7 @@ defineEmits<{
 	color: var(--text-strong);
 	display: flex;
 	flex-grow: 1;
-	font-weight: 700;
+	font-weight: 600;
 	padding: 0.75rem 1rem;
 
 	&.is-centered {
@@ -118,13 +119,13 @@ defineEmits<{
 	padding: 1.5rem;
 
 	&:first-child {
-		border-start-start-radius: $radius;
-		border-start-end-radius: $radius;
+		border-start-start-radius: $radius-large;
+		border-start-end-radius: $radius-large;
 	}
 
 	&:last-child {
-		border-end-start-radius: $radius;
-		border-end-end-radius: $radius;
+		border-end-start-radius: $radius-large;
+		border-end-end-radius: $radius-large;
 	}
 
 	// Utility classes like .p-0 are defined globally with lower specificity
@@ -137,7 +138,10 @@ defineEmits<{
 .card-footer {
 	align-items: stretch;
 	background-color: var(--grey-50);
-	border-block-start: 0;
+	border-block-start: 1px solid var(--card-border-color);
+	// Inner radius of a 1px bordered card, so the tinted footer does not poke out of the corners
+	border-end-start-radius: $radius-large - 1px;
+	border-end-end-radius: $radius-large - 1px;
 	padding: 20px;
 	display: flex;
 	justify-content: flex-end;

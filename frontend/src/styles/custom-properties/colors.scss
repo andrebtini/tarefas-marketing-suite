@@ -20,12 +20,12 @@
   //--border: #dbdbdb;
   --border-rgb: 219.3, 219.3, 219.3;
   --border-hover: #b5b5b5;
-  --border-light: #ededed;
+  --border-light: var(--ms-border);
   --border-light-hover: #b5b5b5;
-  --text: #4a4a4a;
+  --text: #2b2f36;
   --text-invert: #fff;
-  --text-light: #7a7a7a;
-  --text-strong: #363636;
+  --text-light: var(--grey-500);
+  --text-strong: #16181d;
   --code: #da1039;
   --code-background: var(--background, whitesmoke);
   --pre: var(--text, #4a4a4a);
@@ -88,13 +88,16 @@
   //--primary: hsla(var(--primary-h), var(--primary-s), var(--primary-l), var(--primary-a));
   --primary-invert-l: 100%;
   --primary-invert: #fff;
-  --primary-light-l: 96%;
+  // 97% on the brand hue is #f0f5ff, the brand scale 50
+  --primary-light-l: 97%;
   --primary-light: hsla(var(--primary-h), var(--primary-s), var(--primary-light-l), var(--primary-a));
-  --primary-dark-l: 29%;
+  // 30% on the brand hue is about #003399, the brand pressed shade used for button hover
+  --primary-dark-l: 30%;
   --primary-dark: hsla(var(--primary-h), var(--primary-s), var(--primary-dark-l), var(--primary-a));
-  --link-h: 229deg;
-  --link-s: 53%;
-  --link-l: 53%;
+  // Links follow the brand primary, so --link-light and --link-dark keep the same hue
+  --link-h: var(--primary-h);
+  --link-s: var(--primary-s);
+  --link-l: var(--primary-l);
   --link-a: 1;
   //--link: hsla(var(--link-h), var(--link-s), var(--link-l), var(--link-a));
   --link-invert-l: 100%;
@@ -153,10 +156,10 @@
   --input-shadow: inset 0 0.0625em 0.125em rgba(var(--scheme-invert-rgb, 10.2, 10.2, 10.2), 0.05);
   --input-placeholder-color: #6e6e6e;
   --input-hover-color: var(--text-strong, #363636);
-  --input-hover-border-color: var(--border-hover, #b5b5b5);
+  --input-hover-border-color: var(--ms-text-subtle);
   --input-focus-color: var(--text-strong, #363636);
   --input-focus-border-color: var(--link, #485fc7);
-  --input-focus-box-shadow-color: var(--input-focus-box-shadow-color-hsla, rgba(72, 95, 199, 0.25));
+  --input-focus-box-shadow-color: hsla(var(--primary-hsl), 0.25);
   --input-disabled-color: var(--text-light, #7a7a7a);
   //--input-disabled-background-color: var(--background, whitesmoke);
   //--input-disabled-border-color: var(--background, whitesmoke);
@@ -189,7 +192,9 @@
   --grey-700: hsl(216.9, 19.1%, 26.7%);
   --grey-800: hsl(215, 27.9%, 16.9%);
   --grey-900: hsl(220.9, 39.3%, 11%);
-  --site-background: var(--grey-100);
+  // Header, sidebar and the other chrome paint --site-background (white); the body paints
+  // --ms-board behind the content (see theme/theme.scss)
+  --site-background: var(--white);
 
   // Muted body text (metadata, counts) darkened from --grey-500 to clear 4.5:1 on both white and --grey-100
   --text-muted: hsl(220, 8.9%, 42%);
@@ -202,7 +207,7 @@
   --grey-light: var(--grey-300);
   --grey-lighter: var(--grey-200);
   --grey-lightest: var(--grey-100);
-  --input-border-color: var(--grey-200);
+  --input-border-color: var(--ms-border-strong);
 
   --white-h: 0deg;
   --white-s: 0%;
@@ -242,10 +247,10 @@
   --danger-text-l: 40%;
   --danger-text: hsla(var(--danger-h), var(--danger-s), var(--danger-text-l), var(--danger-a));
 
-  // var(--primary) / $blue is #1973ff
-  --primary-h: 217deg;
-  --primary-s: 98%;
-  --primary-l: 53%;
+  // var(--primary) is the Marketing Suite accent #0042bc (white text on it: 8.4:1)
+  --primary-h: 219deg;
+  --primary-s: 100%;
+  --primary-l: 37%;
   --primary-a: 1;
   --primary-hsl: var(--primary-h), var(--primary-s), var(--primary-l);
   --primary: hsla(var(--primary-h), var(--primary-s), var(--primary-l), var(--primary-a));
@@ -264,7 +269,7 @@
   --switch-view-active-background: var(--primary);
 
   // Define custom color variable to allow change in dark mode
-  --card-border-color: var(--grey-200);
+  --card-border-color: var(--ms-border);
   --logo-text-color: hsl(180, 1%, 15%);
 
   // Code colors
@@ -273,6 +278,32 @@
   --code-symbol: #0ead69;
   --code-section: #3a86ff;
   --code-keyword: #8338ec;
+
+  // Marketing Suite tokens, light theme. Values follow the approved reference design;
+  // the dark values live in the &.dark block below.
+  --ms-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ms-border: #edeef1;
+  --ms-border-strong: #e4e6ea;
+  --ms-board: #fafafb;
+  --ms-surface: var(--white);
+  --ms-hover: #f4f5f7;
+  --ms-active: #f4f5f7;
+  --ms-text-subtle: #9ca1ab;
+  --ms-primary-text: #0042bc;
+  --ms-primary-tint: #f0f5ff;
+  // Solid primary background under white text (buttons). Stays #0042bc in dark mode,
+  // where --primary becomes the lighter #5b8dff
+  --ms-primary-fill: var(--primary);
+  // Tinted chip or counter for a color in --c:
+  // background: color-mix(in srgb, var(--c) var(--ms-tint), transparent);
+  // color: color-mix(in oklab, var(--c) var(--ms-ink-mix), var(--ms-ink));
+  --ms-tint: 12%;
+  --ms-ink: #000000;
+  --ms-ink-mix: 62%;
+  --ms-status-grey: #9ca1ab;
+  --ms-status-done: #10b981;
+  --ms-shadow-hover: 0 1px 2px rgba(16, 24, 40, .04), 0 1px 3px rgba(16, 24, 40, .06);
+  --ms-shadow-drag: 0 16px 32px -8px rgba(16, 24, 40, .22), 0 4px 10px -2px rgba(16, 24, 40, .08);
 
   &.dark {
     @media screen {
@@ -286,10 +317,14 @@
       --grey-500: hsl(var(--grey-500-hsl));
       --grey-400: hsl(220, 8.9%, 46.1%);
       --grey-300: hsl(215, 13.8%, 34.1%);
-      --grey-200: hsl(216.9, 19.1%, 26.7%);
-      --grey-100-hsl: 215, 27.9%, 16.9%;
+      // Marketing Suite dark palette: grey-50 (which is --white) is the #0a0a0a surface,
+      // grey-100 the #141824 hover and grey-200 the #1e293b elevated tone. The #05060d base is
+      // --ms-board, painted on the body. grey-100 stays lighter than grey-50 on purpose:
+      // hovers and chips paint grey-100 on top of a --white surface.
+      --grey-200: hsl(217.2, 32.6%, 17.5%);
+      --grey-100-hsl: 225, 28.6%, 11%;
       --grey-100: hsl(var(--grey-100-hsl));
-      --grey-50-hsl: 220.9, 39.3%, 11%;
+      --grey-50-hsl: 0, 0%, 3.9%;
       --grey-50: hsl(var(--grey-50-hsl));
 
       // Dark grey looks better than black
@@ -299,7 +334,8 @@
       // Text renders better in grey than black
       --text: var(--grey-800);
       --text-invert: #000;
-      --text-light: var(--grey-300);
+      // grey-300 reads 2.6:1 on the dark surface; grey-500 reads 7.8:1
+      --text-light: var(--grey-500);
       --text-strong: var(--grey-900);
 
       // Elements that rely on Bulma defaults in light mode but
@@ -318,18 +354,22 @@
       --button-focus-color: var(--grey-600);
 
       // Custom color variables we need to override
-      --card-border-color: hsla(var(--grey-100-hsl), 0.3);
+      // (--card-border-color needs no override: it points at --ms-border, redefined below)
       --logo-text-color: var(--grey-700);
 
-      // Slightly different primary color to make sure it has a sufficient contrast ratio
-      --primary-h: 217deg;
-      --primary-s: 98%;
-      --primary-l: 58%;
+      // Brand light accent #5b8dff for text, links, borders and focus rings: 6.3:1 on the
+      // #0a0a0a surface. White text on it would fail (3.1:1), so solid fills under white text
+      // use --ms-primary-fill, and Bulma's inverted text on primary turns dark.
+      --primary-h: 221.7deg;
+      --primary-s: 100%;
+      --primary-l: 67.8%;
+      --primary-invert: #05060d;
+      --link-invert: #05060d;
 
       // Muted text is a light grey on dark backgrounds and already passes; keep it
       --text-muted: var(--grey-500);
-      // The lighter dark-mode primary fails white-text contrast on the active view tab, so darken it there
-      --switch-view-active-background: hsl(var(--primary-h), var(--primary-s), 50%);
+      // The lighter dark-mode primary fails white-text contrast on the active view tab, so use the fill there
+      --switch-view-active-background: var(--ms-primary-fill);
 
       // Bright values already pass contrast on dark backgrounds; skip the light-theme darkening
       --danger-text: var(--danger);
@@ -346,6 +386,22 @@
       --code-symbol: #b9f18d;
       --code-section: #faf594;
       --code-keyword: #70cff8;
+
+      // Marketing Suite tokens, dark theme. --ms-ease, --ms-status-* and --ms-shadow-hover
+      // keep the light value; --ms-surface follows --white.
+      --ms-border: rgba(255, 255, 255, .08);
+      --ms-border-strong: rgba(255, 255, 255, .12);
+      --ms-board: #05060d;
+      --ms-hover: #141824;
+      --ms-active: #1e293b;
+      --ms-text-subtle: rgba(255, 255, 255, .42);
+      --ms-primary-text: #5b8dff;
+      --ms-primary-tint: rgba(91, 141, 255, .12);
+      --ms-primary-fill: #0042bc;
+      --ms-tint: 20%;
+      --ms-ink: #ffffff;
+      --ms-ink-mix: 72%;
+      --ms-shadow-drag: 0 16px 40px -8px rgba(0, 0, 0, .7), 0 0 0 1px rgba(91, 141, 255, .25);
     }
   }
 }

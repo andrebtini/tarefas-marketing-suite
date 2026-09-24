@@ -12,14 +12,15 @@
                0 5px 10px hsla(var(--grey-500-hsl), .05);
 
   &.dark {
-    // Even darker shadows for dark mode
-    --shadow-xs: 0 1px 3px hsla(var(--grey-50-hsl), 0.4),
+    // Surfaces and the board are both near black in dark mode, so a drop shadow alone
+    // cannot lift a popup; every level also draws a hairline ring in the border color.
+    --shadow-xs: 0 0 0 1px var(--ms-border),
                  0 1px 2px hsla(var(--grey-50-hsl), 0.8);
-    --shadow-sm: 0 3px 6px hsla(var(--grey-50-hsl), 0.8),
-                 0 2px 4px hsla(var(--grey-50-hsl), 0.6);
-    --shadow-md: 0 10px 20px hsla(var(--grey-50-hsl), 0.8),
-                 0 3px 6px hsla(var(--grey-50-hsl), 0.6);
-    --shadow-lg: 0 15px 25px hsla(var(--grey-50-hsl), 0.8),
-                 0 5px 10px hsla(var(--grey-50-hsl), 0.4);
+    --shadow-sm: 0 0 0 1px var(--ms-border),
+                 0 3px 6px hsla(var(--grey-50-hsl), 0.8);
+    --shadow-md: 0 0 0 1px var(--ms-border),
+                 0 10px 20px hsla(var(--grey-50-hsl), 0.8);
+    --shadow-lg: 0 0 0 1px var(--ms-border),
+                 0 15px 25px hsla(var(--grey-50-hsl), 0.8);
   }
 }

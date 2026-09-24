@@ -36,8 +36,10 @@ a, button, input[type='checkbox'], input[type='radio'], select, [tabindex], [con
 }
 
 body {
-  background: var(--site-background);
+  // The content area shows the board tone; header and sidebar paint --site-background (white)
+  background: var(--ms-board);
   min-height: 100vh;
+  letter-spacing: -0.01em;
  
   @media print {
     background: #fff;
@@ -51,7 +53,13 @@ h4,
 h5,
 h6 {
   font-family: $vikunja-font;
-  font-weight: 400 !important;
+  font-weight: 600 !important;
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.02em;
 }
 
 // FIXME: these helpers should be mixins
@@ -121,6 +129,5 @@ button.table {
 }
 
 .box {
-  border: 1px solid var(--grey-200);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--ms-border);
 }

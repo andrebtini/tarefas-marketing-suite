@@ -1,6 +1,6 @@
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity $transition-duration;
+  transition: opacity $transition;
 }
 
 .fade-enter-from,
@@ -10,7 +10,7 @@
 
 .width-enter-active,
 .width-leave-active {
-  transition: width $transition-duration;
+  transition: width $transition;
 }
 
 .width-enter-from,

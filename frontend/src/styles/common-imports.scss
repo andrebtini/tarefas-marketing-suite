@@ -12,6 +12,12 @@
 
 $family-sans-serif: 'Open Sans', Helvetica, Arial, sans-serif;
 
+// Marketing Suite radius scale: chips, controls and buttons, cards.
+// Must be set before the Bulma import so its !default values lose.
+$radius-small: 4px;
+$radius: 8px;
+$radius-large: 12px;
+
 // the default values get overwritten by the definitions above
 @import "bulma-css-variables/sass/utilities/_all";
 
@@ -26,7 +32,8 @@ $navbar-item-active-color: var(--primary);
 $site-background: var(--grey-100);
 
 $transition-duration: 150ms;
-$transition: $transition-duration ease;
+// Brand curve, the same as the --ms-ease custom property
+$transition: $transition-duration cubic-bezier(0.16, 1, 0.3, 1);
 
 $button-height: 34px;
 $switch-view-height: 2.69rem;

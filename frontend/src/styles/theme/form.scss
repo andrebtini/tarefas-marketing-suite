@@ -29,7 +29,7 @@
       &:active,
       &:focus,
       &:focus:not(:active) {
-        border-color: $color;
+        border-color: var(--#{$name}, #{$color});
       }
     }
   }
@@ -79,7 +79,7 @@
 .input.title {
   font-size: 1.8rem;
   font-family: $vikunja-font;
-  font-weight: 400 !important;
+  font-weight: 600 !important;
   background: transparent;
   border-color: transparent;
   margin: 0 .3rem;

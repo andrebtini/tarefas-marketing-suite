@@ -74,7 +74,7 @@ import XButton from '@/components/input/Button.vue'
 const model = defineModel<string>({ required: true })
 
 const DEFAULT_COLORS = [
-	'#1973ff',
+	'#0042bc',
 	'#7F23FF',
 	'#ff4136',
 	'#ff851b',
