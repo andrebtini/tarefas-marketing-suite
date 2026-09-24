@@ -170,7 +170,7 @@
                         {
                             "key": "presence",
                             "default_value": "false",
-                            "comment": "Shows who is online to the people they work with. When enabled, the websocket pushes the user.presence event and GET /api/v2/user/presence lists the online users, both limited to users who share at least one project or one team. A user counts as online while they have an open websocket connection and for 30 seconds after the last one closes, so a page reload does not flicker. When disabled, nothing is tracked, the event cannot be subscribed to and the route is not mounted."
+                            "comment": "Shows who is online to the people they work with. When enabled, the websocket pushes the user.presence event and GET /api/v2/user/presence lists the online users, both limited to the members of their teams and, on the projects they reach, the users the project user list shows them (members of a shared team only to project admins). A user counts as online while they have an open websocket connection and for 30 seconds after the last one closes, so a page reload does not flicker. When disabled, nothing is tracked, the event cannot be subscribed to and the route is not mounted."
                         }
                     ]
                 }
