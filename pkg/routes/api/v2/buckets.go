@@ -45,7 +45,7 @@ func RegisterBucketRoutes(api huma.API) {
 	Register(api, huma.Operation{
 		OperationID: "buckets-list",
 		Summary:     "List the buckets of a kanban view",
-		Description: "Returns all kanban buckets of a project view, ordered by position. Requires read access to the project. The list is not paginated by the server but is returned in the standard list envelope. To get the buckets together with their tasks, use the buckets/tasks endpoint instead. With with_count=true every bucket's count holds the number of tasks the kanban board shows in it (view filter and permissions applied), without returning the tasks; only views in manual bucket mode are counted. Without it count is always 0.",
+		Description: "Returns all kanban buckets of a project view, ordered by position. Requires read access to the project. The list is not paginated by the server but is returned in the standard list envelope. To get the buckets together with their tasks, use the buckets/tasks endpoint instead. With with_count=true every bucket's count holds the number of tasks the kanban board shows in it (view filter and permissions applied), without returning the tasks; only views in manual bucket mode are counted. Without it count is always 0. An API token needs, besides this route, a scope that already reads the view's tasks (buckets/tasks or the view's tasks list) to use with_count=true.",
 		Method:      http.MethodGet,
 		Path:        "/projects/{project}/views/{view}/buckets",
 		Tags:        tags,

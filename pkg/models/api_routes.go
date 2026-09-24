@@ -438,7 +438,8 @@ func GetAvailableAPIRoutesForToken(c *echo.Context) error {
 // PATCH is accepted as an alias for the stored PUT on the same path
 // (AutoPatch collapses both onto the "update" permission).
 //
-// Expansion scopes are enforced after the route match (GHSA-9rg3-v78m-26q8).
+// Expansion scopes are enforced after the route match (GHSA-9rg3-v78m-26q8),
+// and so is the task scope behind with_count on the v2 bucket list.
 func CanDoAPIRoute(c *echo.Context, token *APIToken) (can bool) {
 	path := c.Path()
 	if path == "" {
@@ -454,7 +455,8 @@ func CanDoAPIRoute(c *echo.Context, token *APIToken) (can bool) {
 		return false
 	}
 
-	return expandScopesSatisfied(c, token, path, method)
+	return expandScopesSatisfied(c, token, path, method) &&
+		bucketCountScopeSatisfied(c, token, path, method)
 }
 
 func tokenAuthorizesRoute(token *APIToken, path, method string) bool {
