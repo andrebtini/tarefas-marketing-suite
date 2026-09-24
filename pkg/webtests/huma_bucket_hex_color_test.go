@@ -22,6 +22,7 @@ import (
 	"testing"
 
 	"code.vikunja.io/api/pkg/db"
+	"code.vikunja.io/api/pkg/models"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -29,7 +30,8 @@ import (
 
 // TestHumaBucket_HexColor covers the column color: written through the v2
 // bucket routes with the same permission as any other bucket edit, and read
-// back through v1, which the shipped web client still uses for buckets.
+// back through v1, which the shipped web client still uses for buckets. The
+// v1 update is frozen and never writes the color, so it cannot clear it.
 // Fixtures as in TestHumaBucket: project 1 (kanban view 4) owns buckets 1-3;
 // projects 9 and 10 are shared to testuser1 read-only and with write, their
 // kanban views 36 and 40 carry buckets 9 and 10.
@@ -163,6 +165,36 @@ func TestHumaBucket_HexColor(t *testing.T) {
 			"title":     "Renamed in v1",
 			"hex_color": "ff0000",
 		}, false)
+	})
+	t.Run("v1 update without the color keeps it", func(t *testing.T) {
+		// An old v1 client, or a tab loaded before the color was set, sends no hex_color.
+		rec := humaRequest(t, owned.e, http.MethodPost, "/api/v1/projects/1/views/4/buckets/1", `{"title":"Stale v1 rename"}`, token, "")
+		require.Equal(t, http.StatusOK, rec.Code, "body: %s", rec.Body.String())
+		assert.Contains(t, rec.Body.String(), `"hex_color":"ff0000"`)
+		db.AssertExists(t, "buckets", map[string]interface{}{
+			"id":        1,
+			"title":     "Stale v1 rename",
+			"hex_color": "ff0000",
+		}, false)
+	})
+	t.Run("v1 update does not change the color", func(t *testing.T) {
+		rec := humaRequest(t, owned.e, http.MethodPost, "/api/v1/projects/1/views/4/buckets/1", `{"title":"Stale v1 rename","hex_color":"00ff00"}`, token, "")
+		require.Equal(t, http.StatusOK, rec.Code, "body: %s", rec.Body.String())
+		assert.Contains(t, rec.Body.String(), `"hex_color":"ff0000"`)
+		db.AssertExists(t, "buckets", map[string]interface{}{
+			"id":        1,
+			"hex_color": "ff0000",
+		}, false)
+	})
+	t.Run("v1 create with a too long color is refused", func(t *testing.T) {
+		rec := humaRequest(t, owned.e, http.MethodPut, "/api/v1/projects/1/views/4/buckets", `{"title":"v1 too long","hex_color":"ff00ff00"}`, token, "")
+		require.Equal(t, http.StatusPreconditionFailed, rec.Code, "body: %s", rec.Body.String())
+		var errResp ValidationErrorResponse
+		require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &errResp), "body: %s", rec.Body.String())
+		assert.Equal(t, models.ErrCodeInvalidData, errResp.Code)
+		require.Len(t, errResp.InvalidFields, 1)
+		assert.Contains(t, errResp.InvalidFields[0], "does not validate as runelength(0|7)")
+		db.AssertMissing(t, "buckets", map[string]interface{}{"title": "v1 too long"})
 	})
 }
 

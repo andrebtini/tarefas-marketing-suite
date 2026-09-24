@@ -64,6 +64,7 @@ func TestBucket_HexColor(t *testing.T) {
 			Limit:         9999999,
 			Position:      1,
 			ProjectViewID: 4,
+			writeHexColor: true,
 		}
 		require.NoError(t, b.Update(s, u))
 		require.NoError(t, s.Commit())
@@ -85,6 +86,7 @@ func TestBucket_HexColor(t *testing.T) {
 			Title:         "testbucket1",
 			HexColor:      "#00ff00",
 			ProjectViewID: 4,
+			writeHexColor: true,
 		}
 		require.NoError(t, b.Update(s, u))
 		require.NoError(t, s.Commit())
@@ -95,21 +97,53 @@ func TestBucket_HexColor(t *testing.T) {
 			"hex_color": "00ff00",
 		}, false)
 	})
-	t.Run("update without a color clears it", func(t *testing.T) {
+	t.Run("v2 update without a color clears it", func(t *testing.T) {
 		db.LoadAndAssertFixtures(t)
 		s := db.NewSession()
 		defer s.Close()
 
-		colored := &Bucket{ID: 1, Title: "testbucket1", HexColor: "ff0000", ProjectViewID: 4}
+		colored := &Bucket{ID: 1, Title: "testbucket1", HexColor: "ff0000", ProjectViewID: 4, writeHexColor: true}
 		require.NoError(t, colored.Update(s, u))
-		cleared := &Bucket{ID: 1, Title: "testbucket1", ProjectViewID: 4}
+		stored, err := getBucketByID(s, 1)
+		require.NoError(t, err)
+		require.Equal(t, "ff0000", stored.HexColor)
+
+		cleared := &Bucket{ID: 1, Title: "testbucket1", ProjectViewID: 4, writeHexColor: true}
 		require.NoError(t, cleared.Update(s, u))
+		stored, err = getBucketByID(s, 1)
+		require.NoError(t, err)
+		assert.Empty(t, stored.HexColor)
 		require.NoError(t, s.Commit())
 
 		db.AssertMissing(t, "buckets", map[string]interface{}{
 			"id":        1,
 			"hex_color": "ff0000",
 		})
+	})
+	t.Run("v1 update keeps the stored color", func(t *testing.T) {
+		db.LoadAndAssertFixtures(t)
+		s := db.NewSession()
+		defer s.Close()
+
+		colored := &Bucket{ID: 1, Title: "testbucket1", HexColor: "ff0000", ProjectViewID: 4, writeHexColor: true}
+		require.NoError(t, colored.Update(s, u))
+
+		// A v1 body without hex_color, as an old client or a stale tab sends it.
+		renamed := &Bucket{ID: 1, Title: "Renamed", ProjectViewID: 4}
+		require.NoError(t, renamed.Update(s, u))
+		assert.Equal(t, "ff0000", renamed.HexColor, "the v1 answer carries the stored color")
+
+		// A v1 body with another color does not change it either.
+		recolored := &Bucket{ID: 1, Title: "Renamed", HexColor: "00ff00", ProjectViewID: 4}
+		require.NoError(t, recolored.Update(s, u))
+		assert.Equal(t, "ff0000", recolored.HexColor, "the v1 answer carries the stored color")
+		require.NoError(t, s.Commit())
+
+		db.AssertExists(t, "buckets", map[string]interface{}{
+			"id":        1,
+			"title":     "Renamed",
+			"hex_color": "ff0000",
+		}, false)
 	})
 }
 

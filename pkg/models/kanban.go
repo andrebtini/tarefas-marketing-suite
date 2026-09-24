@@ -64,6 +64,11 @@ type Bucket struct {
 	// Including the task collection type so we can use task filters on kanban
 	TaskCollection `xorm:"-" json:"-"`
 
+	// writeHexColor makes Update write hex_color. Only the v2 buckets-update
+	// route turns it on, through EnableHexColorWrite. v1 is frozen and does not
+	// write the color, so a v1 client that leaves it out cannot clear it.
+	writeHexColor bool `xorm:"-"`
+
 	web.Permissions `xorm:"-" json:"-"`
 	web.CRUDable    `xorm:"-" json:"-"`
 }
@@ -71,6 +76,12 @@ type Bucket struct {
 // TableName returns the table name for this bucket.
 func (b *Bucket) TableName() string {
 	return "buckets"
+}
+
+// EnableHexColorWrite makes Update write hex_color too. The v2 buckets-update
+// route calls it; the v1 update does not, so it keeps the stored color.
+func (b *Bucket) EnableHexColorWrite() {
+	b.writeHexColor = true
 }
 
 func getBucketByID(s *xorm.Session, id int64) (b *Bucket, err error) {
@@ -350,17 +361,27 @@ func (b *Bucket) Create(s *xorm.Session, a web.Auth) (err error) {
 // @Failure 500 {object} models.Message "Internal error"
 // @Router /projects/{projectID}/views/{view}/buckets/{bucketID} [post]
 func (b *Bucket) Update(s *xorm.Session, _ web.Auth) (err error) {
-	b.HexColor = utils.NormalizeHex(b.HexColor)
+	cols := []string{"title", "limit", "position"}
+	if b.writeHexColor {
+		b.HexColor = utils.NormalizeHex(b.HexColor)
+		cols = append(cols, "hex_color")
+	}
 	_, err = s.
 		Where("id = ?", b.ID).
-		Cols(
-			"title",
-			"limit",
-			"position",
-			"hex_color",
-		).
+		Cols(cols...).
 		Update(b)
-	return
+	if err != nil || b.writeHexColor {
+		return err
+	}
+
+	// The v1 update does not write the color, so answer with the stored one
+	// instead of echoing whatever the body carried.
+	stored, err := getBucketByID(s, b.ID)
+	if err != nil {
+		return err
+	}
+	b.HexColor = stored.HexColor
+	return nil
 }
 
 // Delete removes a bucket, but no tasks

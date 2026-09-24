@@ -133,6 +133,8 @@ func bucketsUpdate(ctx context.Context, in *struct {
 	b.ID = in.BucketID          // URL wins over body
 	b.ProjectID = in.ProjectID  // URL wins over body
 	b.ProjectViewID = in.ViewID // URL wins over body
+	// Only v2 writes the color; a v1 update keeps the stored one.
+	b.EnableHexColorWrite()
 	if err := handler.DoUpdate(ctx, b, a); err != nil {
 		return nil, translateDomainError(err)
 	}
