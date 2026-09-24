@@ -89,6 +89,8 @@ type User struct {
 	ID int64 `xorm:"bigint autoincr not null unique pk" json:"id" param:"bot" readOnly:"true" doc:"The unique, numeric id of this user."`
 	// The full name of the user.
 	Name string `xorm:"text null" json:"name" doc:"The full name of the user."`
+	// The user's job title, shown under their name. Only the user can set their own.
+	JobTitle string `xorm:"varchar(100) null" json:"job_title,omitempty" readOnly:"true" maxLength:"100" doc:"The user's job title, shown under their name. Omitted when empty. Only the user can set their own, through PUT /api/v2/user/settings/job-title; ignored in every other request body."`
 	// The username of the user. Is always unique.
 	Username string `xorm:"varchar(250) not null unique" json:"username" valid:"length(1|250)" minLength:"1" maxLength:"250" doc:"The username of the user. Is always unique. For bot users it must start with the 'bot-' prefix."`
 	Password string `xorm:"varchar(250) null" json:"-"`

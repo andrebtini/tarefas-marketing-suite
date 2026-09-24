@@ -155,6 +155,8 @@ func CreateBotUser(s *xorm.Session, bot *User, owner *User) (*User, error) {
 	bot.Issuer = IssuerLocal
 	bot.Password = ""
 	bot.Email = ""
+	// The job title is self-service only, so an owner cannot set one for their bot.
+	bot.JobTitle = ""
 
 	if _, err := s.Insert(bot); err != nil {
 		return nil, err
