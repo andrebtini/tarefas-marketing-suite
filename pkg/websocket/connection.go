@@ -146,7 +146,7 @@ func (c *Connection) handleMessage(ctx context.Context, msg IncomingMessage) boo
 			c.sendError("auth_required", "")
 			return true
 		}
-		if !isValidEvent(msg.Event) {
+		if !c.canSubscribe(msg.Event) {
 			c.sendError("invalid_event", msg.Event)
 			return true
 		}
@@ -271,4 +271,12 @@ var validEvents = map[string]bool{
 
 func isValidEvent(event string) bool {
 	return validEvents[event]
+}
+
+// canSubscribe admits user.presence only on a hub that tracks presence.
+func (c *Connection) canSubscribe(event string) bool {
+	if event == PresenceEvent {
+		return c.hub != nil && c.hub.presence != nil
+	}
+	return isValidEvent(event)
 }

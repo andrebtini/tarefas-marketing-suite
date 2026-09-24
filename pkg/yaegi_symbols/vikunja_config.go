@@ -181,6 +181,7 @@ func init() {
 		"ServiceJWTTTL":                              reflect.ValueOf(config.ServiceJWTTTL),
 		"ServiceJWTTTLLong":                          reflect.ValueOf(config.ServiceJWTTTLLong),
 		"ServiceJWTTTLShort":                         reflect.ValueOf(config.ServiceJWTTTLShort),
+		"ServiceMSPresence":                          reflect.ValueOf(config.ServiceMSPresence),
 		"ServiceMaxAvatarSize":                       reflect.ValueOf(config.ServiceMaxAvatarSize),
 		"ServiceMaxItemsPerPage":                     reflect.ValueOf(config.ServiceMaxItemsPerPage),
 		"ServiceMotd":                                reflect.ValueOf(config.ServiceMotd),
