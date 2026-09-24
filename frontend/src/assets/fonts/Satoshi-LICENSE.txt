@@ -1,0 +1,17 @@
+Satoshi Variable
+Copyright 2017-2021 Indian Type Foundry
+
+Source: Fontshare, https://www.fontshare.com/fonts/satoshi
+License: ITF Free Font License (FFL), https://www.fontshare.com/terms
+
+Summary kept by Marketing Suite (lp-growth/assets/fonts/LICENCA-satoshi.txt in
+the marketingsuite.com.br repository): free for personal and commercial use;
+selling the font file or redistributing it on its own is not allowed.
+The download did not include the full license text, so it is not archived here.
+
+File in this folder:
+  Satoshi[wght]_5db5f133.woff2
+  Variable font, weights 300 to 900, exactly as delivered by Fontshare.
+  Copied from marketingsuite.com.br/lp-growth/assets/fonts/satoshi-var.woff2
+  SHA-256 7eb327776e2e78813d30ff27f7dc7ab6884e8fecf2bf4b1d3847d5d83a61868d
+  It is not subsetted: scripts/fonts-subset.sh leaves it alone.

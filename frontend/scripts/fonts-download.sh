@@ -1,26 +1,42 @@
-#!/bin/sh
+#!/usr/bin/env bash
 set -e
 
 #
-# This script downloads our original font files from their source repos
-# and puts them in our originalMedia folder.
+# This script downloads our original font files from their source repos,
+# checks their SHA-256 and puts them in our originalMedia folder.
+#
+# Satoshi is not downloaded here: it is not published on GitHub or Google Fonts
+# and Fontshare has no versioned download link. Its variable woff2 is committed
+# as delivered in src/assets/fonts, see src/assets/fonts/Satoshi-LICENSE.txt.
 #
 
 err_report() {
-  echo "Error on line $(caller)" >&2
+	echo "Error on line $(caller)" >&2
 }
 
 trap err_report ERR
 
 ORIGINAL_FONTS_DIR="./originalMedia/fonts"
 
+# JetBrains Mono v2.304, pinned to the commit of the release tag.
+# GitHub publishes no SHA-256 for this release. The values below come from the
+# first download, after checking that the git blob hashes of the files matched
+# the ones GitHub lists for this commit:
+#   fonts/variable/JetBrainsMono[wght].ttf  b60e77f5dbf5505436c1904cb7a9ac4111ee76d0
+#   OFL.txt                                 8bee4148c1d54dbf5dae6d6c117fc80414266abb
 # update these if there is a new version
-FONT_URLS=(
-"https://github.com/googlefonts/opensans/blob/27d060e1aad6886daeda67629ee28189f795f534/fonts/variable/OpenSans%5Bwdth%2Cwght%5D.ttf?raw=true"
-"https://github.com/googlefonts/opensans/blob/27d060e1aad6886daeda67629ee28189f795f534/fonts/variable/OpenSans-Italic%5Bwdth%2Cwght%5D.ttf?raw=true"
-"https://github.com/andrew-paglinawan/QuicksandFamily/blob/db6de44878582966f45a0debaef10d57108d93a7/fonts/Quicksand%5Bwght%5D.ttf?raw=true"
-)
+JETBRAINS_MONO_COMMIT="cd5227bd1f61dff3bbd6c814ceaf7ffd95e947d9"
+JETBRAINS_MONO_URL="https://raw.githubusercontent.com/JetBrains/JetBrainsMono/${JETBRAINS_MONO_COMMIT}"
 
+# Downloads a file into the originalMedia folder and stops if its SHA-256 differs.
+download_font_file() {
+	URL=$1
+	FILE_NAME=$2
+	EXPECTED_SHA256=$3
+
+	curl --fail --location --silent --show-error --output "${ORIGINAL_FONTS_DIR}/${FILE_NAME}" "$URL"
+	echo "${EXPECTED_SHA256}  ${ORIGINAL_FONTS_DIR}/${FILE_NAME}" | sha256sum --check -
+}
 
 echo ""
 echo "###################################################"
@@ -28,29 +44,16 @@ echo "# Download font files"
 echo "###################################################"
 echo ""
 
-mkdir -p $ORIGINAL_FONTS_DIR
+mkdir -p "$ORIGINAL_FONTS_DIR"
 
-for URL in ${FONT_URLS[@]}; do
-	wget -L $URL \
-		--directory-prefix=$ORIGINAL_FONTS_DIR \
-		--quiet \
-		--timestamping \
-		--show-progress
-done
+download_font_file \
+	"${JETBRAINS_MONO_URL}/fonts/variable/JetBrainsMono%5Bwght%5D.ttf" \
+	"JetBrainsMono[wght].ttf" \
+	"662a196d58f1183bf2d77428b6d5283fe3f45161ab021bea4036bc98e5cac016"
 
-echo ""
-echo "###################################################"
-echo "# Remove '?raw=true' filename suffix"
-echo "###################################################"
-echo ""
+download_font_file \
+	"${JETBRAINS_MONO_URL}/OFL.txt" \
+	"JetBrainsMono-OFL.txt" \
+	"30f0c136e3c88e422d0791acd97238870f9054a9729bc34cf2ff0d4ed8cac4ad"
 
-# Iterate over all files in directory with filetype ending in "?raw=true"
-for file in $ORIGINAL_FONTS_DIR/*?raw=true; do
-	# Remove "?raw=true" from file name and store in variable
-	new_name=$(echo $file | sed 's/?raw=true//')
-
-	# Overwrite existing file with new name
-	mv -v $file $new_name
-done
-
-echo "Renaming files complete"
+echo "Download complete"

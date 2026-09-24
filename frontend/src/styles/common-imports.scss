@@ -10,7 +10,9 @@
 // are defined here.
 //
 
-$family-sans-serif: 'Open Sans', Helvetica, Arial, sans-serif;
+$family-sans-serif: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+// Bulma uses it for code and pre; theme/typography.scss adds the task identifiers.
+$family-code: 'JetBrains Mono', ui-monospace, Consolas, monospace;
 
 // Marketing Suite radius scale: chips, controls and buttons, cards.
 // Must be set before the Bulma import so its !default values lose.
@@ -24,7 +26,8 @@ $radius-large: 12px;
 // mobile minimum width
 $mobile: 320px;
 
-$vikunja-font: 'Quicksand', sans-serif;
+// Headings and navigation had a face of their own; now they share the text one.
+$vikunja-font: $family-sans-serif;
 
 $pagination-current-border: var(--primary);
 $navbar-item-active-color: var(--primary);

@@ -869,7 +869,7 @@ watch(
 	pre {
 		background: var(--grey-200);
 		color: var(--grey-700);
-		font-family: JetBrainsMono, monospace;
+		font-family: $family-code;
 		padding: 0.75rem 1rem;
 		border-radius: $radius;
 

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 set -e
 
 #
@@ -6,8 +6,15 @@ set -e
 # converts them to woff2 files and puts them in the
 # fonts folder.
 #
-# We do have to update the font paths in the @font-face
-# definitions manually since we use a checksum to make
+# The output file name carries a checksum of the input font
+# and of the arguments. At the end the script rewrites the
+# file names in src/styles/fonts.scss to the new checksums.
+#
+# Only JetBrains Mono is processed here. Satoshi is not:
+# Fontshare ships it as a variable woff2 that is already small
+# (about 42 KB), so src/assets/fonts/Satoshi[wght]_*.woff2 is
+# committed as delivered and this script leaves it alone.
+# Its origin and license are in src/assets/fonts/Satoshi-LICENSE.txt.
 #
 # We use fonttools to create a partial instance of the
 # variable font where we keep only our needed features.
@@ -15,10 +22,10 @@ set -e
 # https://fonttools.readthedocs.io/en/latest/varLib/instancer.html
 #
 # fonttools requires python > 3.7. For up-to-date
-# instructions see https://github.com/fonttools/fonttools#installation 
+# instructions see https://github.com/fonttools/fonttools#installation
 #
 # Lot's of info was gathered from:
-# https://markoskon.com/creating-font-subsets/ 
+# https://markoskon.com/creating-font-subsets/
 # https://barrd.dev/article/create-a-variable-font-subset-for-smaller-file-size/
 #
 
@@ -47,13 +54,16 @@ AC00-D7AF,U+1100-11FF,U+3130-318F,U+A960-A97F,U+D7B0-D7FF,\
 U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF,\
 U+0590-05FF,U+FB1D-FB4F"
 
+# The files this run produces, one per line. The cleanup at the end keeps them.
+GENERATED_FONT_FILES=""
+
 get_filename_without_type() {
 	filename=$1
-	dirname=$(dirname $filename)
+	dirname=$(dirname "$filename")
 	# Extract the file type using parameter expansion
 	filetype=${filename##*.}
-	basename=$(basename $filename .$filetype)
-	echo $basename
+	basename=$(basename "$filename" ".$filetype")
+	echo "$basename"
 }
 
 # This function takes a font file and creates a subset of it using a specified set of unicode characters.
@@ -69,7 +79,7 @@ instance_and_subset () {
 
 	# If the output font basename is not provided, use the input font file's basename as the output font basename.
 	if [ -z "$OUTPUT_FONT_BASENAME" ]; then
-		INPUT_FONT_BASENAME=$(get_filename_without_type $INPUT_FONT_FILE)
+		INPUT_FONT_BASENAME=$(get_filename_without_type "$INPUT_FONT_FILE")
 		OUTPUT_FONT_BASENAME=$INPUT_FONT_BASENAME
 	fi
 
@@ -77,14 +87,15 @@ instance_and_subset () {
 	SUBSETTER_ARGS="${4:-$DEFAULT_SUBSETTER_ARGS}"
 
 	CHECKSUM=$(
-		# Concatenate the contents of the input font file, the instancer arguments, and the subsetter arguments
-		printf "%s%s" "$(cat $INPUT_FONT_FILE)" "$INSTANCER_ARGS" "$SUBSETTER_ARGS" |
-		# Calculate the Blake2b checksum of the concatenated string
+		# Hash the bytes of the input font file followed by the instancer and subsetter arguments.
+		# The file is piped instead of read into a variable, which would drop its NUL bytes.
+		{ cat "$INPUT_FONT_FILE"; printf "%s%s" "$INSTANCER_ARGS" "$SUBSETTER_ARGS"; } |
+		# Calculate the Blake2b checksum
 		b2sum |
 		# Extract the checksum from the output of b2sum (it's the first field)
 		awk '{print $1}'
 	)
-	
+
 	# Limit the checksum to 8 characters.
 	CHECKSUM=$(echo "${CHECKSUM:0:8}")
 
@@ -92,8 +103,11 @@ instance_and_subset () {
 	OUTPUT_FONT_BASENAME="${OUTPUT_FONT_BASENAME}_${CHECKSUM}"
 	OUTPUT_FONT_FILE="${OUTPUT_FOLDER}/${OUTPUT_FONT_BASENAME}.woff2"
 
+	GENERATED_FONT_FILES="${GENERATED_FONT_FILES}${OUTPUT_FONT_FILE}
+"
+
 	# Check if the output font file already exists
-	if test -f $OUTPUT_FONT_FILE; then
+	if test -f "$OUTPUT_FONT_FILE"; then
 		echo "${OUTPUT_FONT_FILE} exists"
 		return 0
 	fi
@@ -102,14 +116,14 @@ instance_and_subset () {
 
 	if [ -n "$INSTANCER_ARGS" ]; then
 		# If the INSTANCER_ARGS variable is set, use fonttools to create a font instance
-		fonttools varLib.instancer --output $FONT_INSTANCE $INPUT_FONT_FILE $INSTANCER_ARGS
+		fonttools varLib.instancer --output "$FONT_INSTANCE" "$INPUT_FONT_FILE" $INSTANCER_ARGS
 	else
 		# Otherwise, just copy the input font file to the font instance file
-		cp $INPUT_FONT_FILE $FONT_INSTANCE
+		cp "$INPUT_FONT_FILE" "$FONT_INSTANCE"
 	fi
 
 	# Use pyftsubset to create a subset of the font instance and save it to the output font file
-	pyftsubset $FONT_INSTANCE --output-file=$OUTPUT_FONT_FILE --flavor=woff2 $SUBSETTER_ARGS
+	pyftsubset "$FONT_INSTANCE" --output-file="$OUTPUT_FONT_FILE" --flavor=woff2 $SUBSETTER_ARGS
 
 	echo "${OUTPUT_FONT_BASENAME} subsetted."
 }
@@ -146,6 +160,21 @@ fi
 
 echo ""
 echo "###################################################"
+echo "# Collect existing font files for cleanup"
+echo "###################################################"
+echo ""
+
+# Only the files this script generates. Satoshi is committed as delivered and stays.
+OLD_FONT_FILES=$(find "$FONT_FOLDER" -name "JetBrainsMono*.woff2" -type f 2>/dev/null || true)
+if [ -n "$OLD_FONT_FILES" ]; then
+	echo "Found existing font files to check after generation:"
+	echo "$OLD_FONT_FILES"
+else
+	echo "No existing font files found"
+fi
+
+echo ""
+echo "###################################################"
 echo "# Create a partial instance of the variable font"
 echo "# where we keep only our needed features and then"
 echo "# subset fonts with latin unicode range and export"
@@ -153,39 +182,14 @@ echo "# as woff2 file"
 echo "###################################################"
 echo ""
 
-mkdir -p $TEMP_FOLDER
+echo "JetBrains Mono"
+# keep only the weights we use: 400 for code and ids, up to 700 for bold code
+instance_and_subset "${ORIGINAL_FONTS}/JetBrainsMono[wght].ttf" "wght=400:700" "JetBrainsMono[wght]"
 
-echo ""
-echo "###################################################"
-echo "# Collect existing font files for cleanup"
-echo "###################################################"
-echo ""
+# The SIL Open Font License has to travel with the font files.
+cp "${ORIGINAL_FONTS}/JetBrainsMono-OFL.txt" "${FONT_FOLDER}/JetBrainsMono-OFL.txt"
 
-# Collect existing font files to remove later
-OLD_FONT_FILES=$(find $FONT_FOLDER -name "*.woff2" -type f 2>/dev/null || true)
-if [ -n "$OLD_FONT_FILES" ]; then
-    echo "Found existing font files to remove after generation:"
-    echo "$OLD_FONT_FILES"
-else
-    echo "No existing font files found"
-fi
-
-echo "\nOpen Sans"
-# we drop the wdth axis and keep only variable weight range
-
-instance_and_subset "${ORIGINAL_FONTS}/OpenSans[wdth,wght].ttf" "wdth=drop wght=400:700" "OpenSans[wght]"
-
-echo "\nOpen Sans Italic"
-# we drop the wdth axis and keep only variable weight range
-
-instance_and_subset "${ORIGINAL_FONTS}/OpenSans-Italic[wdth,wght].ttf" "wdth=drop wght=400:700" "OpenSans-Italic[wght]"
-
-echo "\nQuicksand"
-# keep only variable weight range
-
-instance_and_subset "${ORIGINAL_FONTS}/Quicksand[wght].ttf" "wght=400:700"
-
-echo "\nSubsetting files complete"
+echo "Subsetting files complete"
 
 echo ""
 echo "###################################################"
@@ -193,17 +197,16 @@ echo "# Clean up old font files"
 echo "###################################################"
 echo ""
 
-# Remove only the old font files we collected earlier
+# Remove the old font files we collected earlier, except the ones this run produced or kept.
 if [ -n "$OLD_FONT_FILES" ]; then
-    echo "Removing old font files..."
-    echo "$OLD_FONT_FILES" | while read -r file; do
-        if [ -f "$file" ]; then
-            echo "Removing: $file"
-            rm -f "$file"
-        fi
-    done
+	echo "$OLD_FONT_FILES" | while read -r file; do
+		if [ -f "$file" ] && ! printf "%s" "$GENERATED_FONT_FILES" | grep -qxF "$file"; then
+			echo "Removing: $file"
+			rm -f "$file"
+		fi
+	done
 else
-    echo "No old font files to remove"
+	echo "No old font files to remove"
 fi
 
 echo ""
@@ -218,30 +221,24 @@ echo "Updating $FONTS_SCSS with new font files..."
 
 # Function to update font file references in SCSS
 update_font_reference() {
-    local pattern="$1"
-    local new_file="$2"
-    
-    # Use sed to replace the font file reference, preserving the rest of the line
-    sed -i "s|${pattern}_[a-f0-9]\{8\}\.woff2|${new_file}|g" "$FONTS_SCSS"
+	local pattern="$1"
+	local new_file="$2"
+
+	# Use sed to replace the font file reference, preserving the rest of the line
+	sed -i "s|${pattern}_[a-f0-9]\{8\}\.woff2|${new_file}|g" "$FONTS_SCSS"
 }
 
 # Update each font file reference with the new checksum
-for file in $FONT_FOLDER/*.woff2; do
-    if [ -f "$file" ]; then
-        basename=$(basename "$file")
-        
-        case $basename in
-            OpenSans\[wght\]_*.woff2)
-                update_font_reference "OpenSans\[wght\]" "$basename"
-                ;;
-            OpenSans-Italic\[wght\]_*.woff2)
-                update_font_reference "OpenSans-Italic\[wght\]" "$basename"
-                ;;
-            Quicksand\[wght\]_*.woff2)
-                update_font_reference "Quicksand\[wght\]" "$basename"
-                ;;
-        esac
-    fi
+for file in "$FONT_FOLDER"/JetBrainsMono*.woff2; do
+	if [ -f "$file" ]; then
+		basename=$(basename "$file")
+
+		case $basename in
+			JetBrainsMono\[wght\]_*.woff2)
+				update_font_reference "JetBrainsMono\[wght\]" "$basename"
+				;;
+		esac
+	fi
 done
 
 echo "fonts.scss updated with new font files"

@@ -75,14 +75,16 @@ function getSentryConfig(env: Record<string, string>): SentryVitePluginOptions {
  * @param fontNames Array of the file names of the fonts without axis and hash suffixes
  */
 function createFontMatcher(fontNames: string[]) {
-	// The `match` option for the files of VitePluginInjectPreload
-	// matches the _output_ files.
-	// Since we only want to mach variable fonts, we exploit here the fact
+	// The `outputMatch` option of UnpluginInjectPreload
+	// matches the _output_ files, relative to the output folder.
+	// Since we only want to match variable fonts, we exploit here the fact
 	// that we added the `wght` term to indicate the variable weight axis.
+	// The brackets of `[wght]` become underscores in the output. The first hash
+	// is the hex checksum in the source file name, the second one is the content
+	// hash of the bundler, made of the characters [A-Za-z0-9_-].
 	// The format is something like:
-	// `/assets/OpenSans-Italic_wght__c9a8fe68-5f21f1e7.woff2`
-	// see: https://regex101.com/r/UgUWr1/1
-	return new RegExp(`^.+\\/(${fontNames.join('|')})_wght__[a-z1-9]{8}-[a-z1-9]{8}\\.woff2$`)
+	// `assets/Satoshi_wght__5db5f133-RgVCjOXr.woff2`
+	return new RegExp(`^.+\\/(${fontNames.join('|')})_wght__[a-f0-9]{8}-[\\w-]{8}\\.woff2$`)
 }
 
 // https://vitejs.dev/config/
@@ -158,10 +160,13 @@ function getBuildConfig(env: Record<string, string>) {
 			// https://github.com/Applelo/unplugin-inject-preload
 			UnpluginInjectPreload({
 				files: [{
-					outputMatch: createFontMatcher(['Quicksand', 'OpenSans', 'OpenSans-Italic']),
+					// Only the text face: JetBrains Mono is just for code and task identifiers.
+					outputMatch: createFontMatcher(['Satoshi']),
 					attributes: {crossorigin: 'anonymous'},
 				}],
-				injectTo: 'custom',
+				// 'custom' looks for <!--__unplugin-inject-preload__-->, but index.html has the
+				// marker of the old vite-plugin-inject-preload, so nothing was ever injected.
+				injectTo: 'head',
 			}),
 			VitePWA({
 				srcDir: 'src',

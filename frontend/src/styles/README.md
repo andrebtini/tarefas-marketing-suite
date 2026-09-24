@@ -14,7 +14,7 @@ the bottom.
 styles/
 ├── common-imports.scss     SCSS variables/mixins auto-injected into every .scss/.vue <style lang="scss">
 ├── global.scss             Entry point: pulls in Bulma partials + theme + components + tokens
-├── fonts.scss              @font-face declarations for Quicksand and Open Sans
+├── fonts.scss              @font-face declarations for Satoshi and JetBrains Mono
 ├── transitions.scss        Vue <Transition> classes (fade, width)
 ├── tailwind.css            Tailwind v4 entry (utilities only, `tw` prefix)
 │
@@ -24,7 +24,7 @@ styles/
 │
 ├── theme/                  Global theme rules — selectors that style the whole app
 │   ├── theme.scss          Base resets, focus-visible ring, .box / .is-fullwidth / etc.
-│   ├── typography.scss     Heading styles using $vikunja-font
+│   ├── typography.scss     Heading wrap, inherited tracking, monospace task identifiers
 │   ├── navigation.scss     .menu / .menu-list styling used by the sidebar
 │   ├── form.scss           Field / control / button add-on tweaks
 │   ├── scrollbars.scss     Custom scrollbar colors
