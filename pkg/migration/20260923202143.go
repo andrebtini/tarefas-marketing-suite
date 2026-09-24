@@ -29,13 +29,15 @@ func (users20260923202143) TableName() string {
 	return "users"
 }
 
+func addUserJobTitle20260923202143(tx *xorm.Engine) error {
+	return partialSync(tx, users20260923202143{})
+}
+
 func init() {
 	migrations = append(migrations, &xormigrate.Migration{
 		ID:          "20260923202143",
 		Description: "Add job_title column to users",
-		Migrate: func(tx *xorm.Engine) error {
-			return partialSync(tx, users20260923202143{})
-		},
+		Migrate:     addUserJobTitle20260923202143,
 		Rollback: func(tx *xorm.Engine) error {
 			return nil
 		},
