@@ -24,3 +24,14 @@ permissions:
 jobs:
   testes:
     uses: ./.github/workflows/test.yml
+
+  # Um check so para a protecao do marketing-suite exigir. O test.yml aparece como 37 checks
+  # separados, e exigir cada um pelo nome quebraria a cada job novo do Vikunja. Este passa so se
+  # todos passaram, e falha se algum falhou, foi cancelado ou pulado.
+  resultado:
+    needs: testes
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Todos os jobs da bateria passaram
+        run: test "${{ needs.testes.result }}" = "success"
