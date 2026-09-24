@@ -322,6 +322,7 @@ func init() {
 		"PreviewSmall":                                     reflect.ValueOf(models.PreviewSmall),
 		"ProjectBackgroundUpload":                          reflect.ValueOf(models.ProjectBackgroundUpload),
 		"ProjectExpandableRights":                          reflect.ValueOf(constant.MakeFromLiteral("\"permissions\"", token.STRING, 0)),
+		"ProjectViewKindCalendar":                          reflect.ValueOf(models.ProjectViewKindCalendar),
 		"ProjectViewKindGantt":                             reflect.ValueOf(models.ProjectViewKindGantt),
 		"ProjectViewKindKanban":                            reflect.ValueOf(models.ProjectViewKindKanban),
 		"ProjectViewKindList":                              reflect.ValueOf(models.ProjectViewKindList),
