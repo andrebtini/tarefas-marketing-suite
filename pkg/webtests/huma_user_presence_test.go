@@ -62,8 +62,7 @@ func wsTestRead(ctx context.Context, t *testing.T, conn *websocket.Conn) wsTestM
 	return msg
 }
 
-// wsTestConnect opens a websocket to the running server and authenticates it as u.
-func wsTestConnect(ctx context.Context, t *testing.T, serverURL string, u *user.User) *websocket.Conn {
+func wsTestDial(ctx context.Context, t *testing.T, serverURL string) *websocket.Conn {
 	t.Helper()
 	conn, resp, err := websocket.Dial(ctx, serverURL+"/api/v1/ws", nil)
 	require.NoError(t, err)
@@ -71,7 +70,13 @@ func wsTestConnect(ctx context.Context, t *testing.T, serverURL string, u *user.
 		_ = resp.Body.Close()
 	}
 	t.Cleanup(func() { _ = conn.CloseNow() })
+	return conn
+}
 
+// wsTestConnect opens a websocket to the running server and authenticates it as u.
+func wsTestConnect(ctx context.Context, t *testing.T, serverURL string, u *user.User) *websocket.Conn {
+	t.Helper()
+	conn := wsTestDial(ctx, t, serverURL)
 	wsTestWrite(ctx, t, conn, map[string]string{"action": "auth", "token": humaTokenFor(t, u)})
 	msg := wsTestRead(ctx, t, conn)
 	require.Equal(t, "auth.success", msg.Action, "unexpected message: %+v", msg)
@@ -150,6 +155,20 @@ func TestHumaUserPresence(t *testing.T) {
 		// Changes go out in the order they happened, so user6 arriving first proves
 		// user14 never got user3, with whom it shares nothing.
 		assert.Equal(t, ws.PresenceChange{UserID: 6, Online: true}, wsTestReadPresence(ctx, t, viewer14))
+	})
+
+	t.Run("A link share cannot open the websocket", func(t *testing.T) {
+		// The token carries id 2: taken for a user id, it would bring user2, who
+		// shares project 3 and team 1 with user1, online.
+		share := &models.LinkSharing{ID: 2, Hash: "test2", ProjectID: 2, Permission: models.PermissionWrite, SharedByID: 1}
+		token, err := auth.NewLinkShareJWTAuthtoken(share)
+		require.NoError(t, err)
+
+		conn := wsTestDial(ctx, t, srv.URL)
+		wsTestWrite(ctx, t, conn, map[string]string{"action": "auth", "token": token})
+		msg := wsTestRead(ctx, t, conn)
+		assert.Equal(t, "invalid_token", msg.Error, "unexpected message: %+v", msg)
+		assert.Equal(t, []int64{3, 6}, presenceIDsFor(t, e, &testuser1), "user2 must not come online")
 	})
 
 	t.Run("Lists only the online users the caller shares something with", func(t *testing.T) {
