@@ -1,1 +1,191 @@
-{}
+{
+	"notifications": {
+		"greeting": "Olá, %[1]s,",
+		"email_confirm": {
+			"subject": "%[1]s, confirme seu endereço de e-mail",
+			"subject_new": "Bem-vindo, %[1]s! Confirme seu e-mail",
+			"welcome": "Bem-vindo!",
+			"confirm": "Para confirmar seu endereço de e-mail, clique no link abaixo:"
+		},
+		"email_change": {
+			"subject": "Foi solicitada a alteração do e-mail da sua conta",
+			"requested": "Alguém solicitou a alteração do e-mail da sua conta para %[1]s. Seu endereço atual continua ativo até que o novo seja confirmado.",
+			"warning": "Se não foi você, troque sua senha imediatamente e cancele a alteração pendente nas configurações da conta."
+		},
+		"password": {
+			"changed": {
+				"subject": "Sua senha foi alterada",
+				"success": "A senha da sua conta foi alterada com sucesso.",
+				"warning": "Se não foi você, sua conta pode ter sido invadida. Nesse caso, entre em contato com o administrador do sistema."
+			},
+			"reset": {
+				"subject": "Redefina sua senha",
+				"instructions": "Para redefinir sua senha, clique no link abaixo:",
+				"valid_duration": "Este link é válido por 24 horas."
+			}
+		},
+		"totp": {
+			"invalid": {
+				"subject": "Alguém tentou entrar na sua conta e não conseguiu",
+				"message": "Alguém acabou de tentar entrar na sua conta com o nome de usuário e a senha corretos, mas com um código de verificação em duas etapas incorreto.",
+				"warning": "**Se não foi você, outra pessoa sabe sua senha. Defina uma nova imediatamente!**"
+			},
+			"account_locked": {
+				"subject": "Desativamos sua conta",
+				"message": "Alguém tentou entrar com seus dados de acesso, mas não informou um código válido de verificação em duas etapas.",
+				"disabled": "Após 10 tentativas sem sucesso, desativamos sua conta e redefinimos sua senha. Para criar uma nova, siga as instruções do e-mail de redefinição que acabamos de enviar.",
+				"reset_instructions": "Se você não recebeu o e-mail com as instruções de redefinição, pode solicitar um novo a qualquer momento em [%[1]s](%[2]s)."
+			}
+		},
+		"login": {
+			"failed": {
+				"subject": "Alguém tentou entrar na sua conta com uma senha incorreta",
+				"message": "Alguém acabou de tentar entrar na sua conta com uma senha incorreta três vezes seguidas.",
+				"warning": "Se não foi você, pode ser outra pessoa tentando invadir sua conta.",
+				"enhance_security": "Para deixar sua conta mais segura, você pode definir uma senha mais forte ou ativar a verificação em duas etapas nas configurações:"
+			}
+		},
+		"account": {
+			"deletion": {
+				"confirm": {
+					"subject": "Confirme a exclusão da sua conta",
+					"request": "Você solicitou a exclusão da sua conta. Para confirmar, clique no link abaixo:",
+					"valid_duration": "Este link é válido por 24 horas.",
+					"schedule_info": "Depois que você confirmar, agendaremos a exclusão da sua conta para daqui a três dias e enviaremos outro e-mail até lá.",
+					"consequences": "Se você seguir com a exclusão da conta, removeremos todos os projetos e tarefas que você criou. Tudo o que você compartilhou com outros usuários ou times passará a pertencer a eles.",
+					"changed_mind": "Se você não solicitou a exclusão ou mudou de ideia, basta ignorar este e-mail."
+				},
+				"scheduled": {
+					"subject_days": "Sua conta será excluída em %[1]s dias",
+					"subject_tomorrow": "Sua conta será excluída amanhã",
+					"request_reminder": "Você solicitou recentemente a exclusão da sua conta.",
+					"deletion_time_days": "Vamos excluir sua conta em %[1]s dias.",
+					"deletion_time_tomorrow": "Vamos excluir sua conta amanhã.",
+					"changed_mind": "Se você mudou de ideia, basta clicar no link abaixo e seguir as instruções para cancelar a exclusão:"
+				},
+				"completed": {
+					"subject": "Sua conta foi excluída",
+					"confirmation": "Conforme solicitado, excluímos sua conta.",
+					"permanent": "Esta exclusão é permanente. Se você não fez um backup e precisa recuperar seus dados agora, fale com o administrador do sistema."
+				}
+			}
+		},
+		"task": {
+			"reminder": {
+				"subject": "Lembrete: \"%[1]s\" (%[2]s)",
+				"message": "Este é um lembrete da tarefa \"%[1]s\" (%[2]s)."
+			},
+			"comment": {
+				"subject": "Re: %[1]s (%[2]s)",
+				"mentioned_subject": "%[1]s mencionou você em um comentário na tarefa \"%[2]s\" (%[3]s)"
+			},
+			"assigned": {
+				"subject_to_assignee": "Uma tarefa foi atribuída a você: \"%[1]s\" (%[2]s)",
+				"message_to_assignee": "%[1]s atribuiu a tarefa \"%[2]s\" a você.",
+				"subject_to_others": "A tarefa \"%[1]s\" (%[2]s) foi atribuída a %[3]s",
+				"message_to_others": "%[1]s atribuiu esta tarefa a %[2]s.",
+				"subject_to_others_self": "%[3]s assumiu a tarefa \"%[1]s\" (%[2]s)",
+				"message_to_others_self": "%[1]s assumiu esta tarefa."
+			},
+			"deleted": {
+				"subject": "A tarefa \"%[1]s\" (%[2]s) foi excluída",
+				"message": "%[1]s excluiu a tarefa \"%[2]s\" (%[3]s)"
+			},
+			"created": {
+				"subject": "A tarefa \"%[1]s\" (%[2]s) foi criada",
+				"message": "%[1]s criou a tarefa \"%[2]s\" (%[3]s)"
+			},
+			"mentioned": {
+				"subject_new": "%[1]s mencionou você na nova tarefa \"%[2]s\" (%[3]s)",
+				"subject": "%[1]s mencionou você na tarefa \"%[2]s\" (%[3]s)"
+			},
+			"overdue": {
+				"subject": "A tarefa \"%[1]s\" (%[2]s) está atrasada",
+				"message": "Este é um lembrete da tarefa \"%[1]s\" (%[2]s), que está atrasada %[3]s e ainda não foi concluída.",
+				"multiple_subject": "Suas tarefas atrasadas",
+				"multiple_message": "Você tem as seguintes tarefas atrasadas:",
+				"overdue_since": "há %[1]s",
+				"overdue_now": "agora",
+				"overdue": "atrasada %[1]s"
+			}
+		},
+		"project": {
+			"created": "%[1]s criou o projeto \"%[2]s\""
+		},
+		"team": {
+			"member_added": {
+				"subject": "%[1]s adicionou você ao time \"%[2]s\"",
+				"message": "%[1]s acabou de adicionar você ao time %[2]s."
+			}
+		},
+		"data_export": {
+			"ready": {
+				"subject": "Sua exportação de dados está pronta",
+				"message": "Sua exportação de dados está pronta. Clique no botão abaixo para baixar o arquivo:",
+				"availability": "O arquivo ficará disponível pelos próximos 7 dias."
+			}
+		},
+		"migration": {
+			"done": {
+				"subject": "A migração de %[1]s foi concluída",
+				"imported": "Importamos de %[1]s todas as listas/projetos, tarefas, notas, lembretes e arquivos aos quais você tem acesso.",
+				"have_fun": "Aproveite seus novos (antigos) projetos!"
+			},
+			"failed": {
+				"subject": "A migração de %[1]s falhou",
+				"message": "Parece que a migração de %[1]s não saiu como planejado desta vez.",
+				"retry": "Mas não se preocupe. Basta tentar de novo, do mesmo jeito que você fez antes. Às vezes, esses problemas acontecem por falhas do lado de %[1]s, e uma nova tentativa costuma resolver.",
+				"error": "Ocorreu um pequeno erro durante o processo: `%[1]s`.",
+				"report": "Por favor, relate o problema [no fórum](https://community.vikunja.io/) ou em um dos canais habituais para que possamos investigar o motivo da falha.",
+				"working_on_it": "Já recebemos a mensagem de erro e estamos trabalhando para resolver o problema em breve."
+			}
+		},
+		"api_token": {
+			"expiring": {
+				"week": {
+					"subject": "Seu token de API \"%[1]s\" expira em breve",
+					"message": "Seu token de API \"%[1]s\" vai expirar em %[2]s (daqui a %[3]s). Se ainda precisar dele, crie um novo token antes disso."
+				},
+				"day": {
+					"subject": "Seu token de API \"%[1]s\" expira amanhã",
+					"message": "Seu token de API \"%[1]s\" vai expirar em %[2]s (daqui a %[3]s). Se ainda precisar dele, crie um novo token antes disso."
+				},
+				"action": "Gerenciar tokens de API"
+			}
+		},
+		"common": {
+			"have_nice_day": "Tenha um ótimo dia!",
+			"copy_url": "Se o botão acima não funcionar, copie o link abaixo e cole na barra de endereços do navegador:",
+			"actions": {
+				"open_task": "Abrir tarefa",
+				"open_vikunja": "Abrir o Marketing Suite",
+				"open_project": "Abrir projeto",
+				"open_team": "Abrir time",
+				"download": "Baixar",
+				"reset_password": "Redefinir senha",
+				"go_to_settings": "Ir para as configurações",
+				"confirm_email": "Confirmar e-mail",
+				"abort_deletion": "Cancelar a exclusão",
+				"confirm_account_deletion": "Confirmar a exclusão da minha conta",
+				"change_notification_settings_link": "Você pode alterar suas configurações de notificação [aqui](%[1]s).",
+				"left_comment": "%[1]s comentou",
+				"mentioned_you_comment": "%[1]s mencionou você em um comentário",
+				"mentioned_you": "%[1]s mencionou você",
+				"mentioned_you_new_task": "%[1]s mencionou você em uma nova tarefa"
+			}
+		}
+	},
+	"time": {
+		"since_years": "um ano|%[1]d anos",
+		"since_weeks": "uma semana|%[1]d semanas",
+		"since_days": "um dia|%[1]d dias",
+		"since_hours": "uma hora|%[1]d horas",
+		"since_minutes": "um minuto|%[1]d minutos",
+		"list_last_separator": "e"
+	},
+	"feeds": {
+		"notifications": {
+			"title": "Notificações de %[1]s no Marketing Suite"
+		}
+	}
+}

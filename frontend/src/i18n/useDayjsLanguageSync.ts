@@ -24,7 +24,7 @@ export const DAYJS_LOCALE_MAPPING = {
 	'ar-sa': 'ar-sa',
 	'fa-ir': 'fa',
 	'sl-si': 'sl',
-	'pt-br': 'pt',
+	'pt-br': 'pt-br',
 	'hr-hr': 'hr',
 	'uk-ua': 'uk',
 	'lt-lt': 'lt',

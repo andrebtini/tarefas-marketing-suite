@@ -21,7 +21,7 @@ export const SUPPORTED_LOCALES = {
 	'cs-CZ': 'Čeština',
 	'pl-PL': 'Polski',
 	'nl-NL': 'Nederlands',
-	'pt-PT': 'Português',
+	'pt-PT': 'Português (Portugal)',
 	'zh-CN': '简体中文',
 	'zh-TW': '繁體中文',
 	'no-NO': 'Norsk Bokmål',
@@ -32,7 +32,7 @@ export const SUPPORTED_LOCALES = {
 	'ar-SA': 'اَلْعَرَبِيَّةُ',
 	'fa-IR': 'فارسی',
 	'sl-SI': 'Slovenščina',
-	'pt-BR': 'Português Brasileiro',
+	'pt-BR': 'Português (Brasil)',
 	'hr-HR': 'Hrvatski',
 	'uk-UA': 'Українська',
 	'lt-LT': 'Lietuvių Kalba',
@@ -116,8 +116,19 @@ export async function setLanguage(lang: SupportedLocale): Promise<SupportedLocal
 	return lang
 }
 
+// Bare language codes that should not fall through to the first matching regional
+// locale. Without this, a browser reporting only "pt" would get pt-PT.
+const BARE_LANGUAGE_DEFAULTS: Partial<Record<string, SupportedLocale>> = {
+	'pt': 'pt-BR',
+}
+
 export function getBrowserLanguage(): SupportedLocale {
 	const browserLanguage = navigator.language
+
+	const bareLanguageDefault = BARE_LANGUAGE_DEFAULTS[browserLanguage]
+	if (bareLanguageDefault) {
+		return bareLanguageDefault
+	}
 
 	const language = Object.keys(SUPPORTED_LOCALES).find(langKey => {
 		return langKey === browserLanguage || langKey.startsWith(browserLanguage + '-')
