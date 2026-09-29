@@ -51,19 +51,24 @@ clpctl site:add:reverse-proxy --domainName=tarefas.marketingsuite.online \
 clpctl lets-encrypt:install:certificate --domainName=tarefas.marketingsuite.online
 ```
 
-No arquivo do nginx (`/etc/nginx/sites-enabled/tarefas.marketingsuite.online.conf`) entraram a linha
-`X-Robots-Tag` (subdomínio interno, fora da busca) e uma trava temporária: `/god-mode` e
-`/api/instances/admins/` só abrem de um IP. O arquivo antes da mudança está em
-`/root/tarefas.marketingsuite.online.conf.antes-plane-2026-09-29`.
+No arquivo do nginx (`/etc/nginx/sites-enabled/tarefas.marketingsuite.online.conf`) entraram:
+- a linha `X-Robots-Tag` (subdomínio interno, fora da busca);
+- um `sub_filter` que injeta `<style id="ms-oculta">` no HTML e esconde o botão "Star us on GitHub"
+  e o selo "Community" (com a barra do rodapé da lateral), sem mexer nas imagens oficiais. Depende
+  do `href` do GitHub, do `aria-label` do selo e das classes `h-12 border-t`: conferir depois de
+  cada atualização do Plane;
+- de 29/09/2026, uma trava que deixava `/god-mode` aberto só para um IP, já retirada depois que o
+  administrador foi criado.
+
+Cópias do arquivo antes de cada mudança ficam em `/root/tarefas.marketingsuite.online.conf.antes-*`.
+**Salvar o site pela tela do CloudPanel pode regravar esse arquivo e apagar as três mudanças.**
 
 ## Primeiro acesso
 
-1. Em `https://tarefas.marketingsuite.online/god-mode/`, criar o administrador da instância (só abre
-   do IP liberado na trava). Quem chega primeiro nessa tela vira dono do Plane.
-2. Tirar os dois blocos `location` da trava no nginx, `nginx -t` e `systemctl reload nginx`.
-3. No god-mode: desligar o cadastro aberto e configurar o e-mail (SMTP do Google Workspace com uma
-   senha de app nova, digitada pela própria tela).
-4. Criar o workspace e convidar o time.
+Feito em 29/09/2026: administrador da instância criado (com a tela travada ao IP dele até então),
+cadastro aberto desligado, telemetria desligada, e-mail pelo SMTP do Google Workspace
+(`atendimento@`, senha de app própria, digitada na tela), workspace `marketing-suite` e projeto
+com prefixo `MS`. A sessão do `/god-mode` dura 1 hora (padrão do Plane, mantido de propósito).
 
 ## Operação
 
