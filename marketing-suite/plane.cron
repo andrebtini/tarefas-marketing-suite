@@ -1,0 +1,6 @@
+# Rotina do Plane. Instalar em /etc/cron.d/plane (dono root, modo 644, nome sem ponto).
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# backup diario, depois do clp-update das 3h
+45 3 * * * root /opt/plane/backup-plane.sh >> /var/log/plane-backup.log 2>&1
