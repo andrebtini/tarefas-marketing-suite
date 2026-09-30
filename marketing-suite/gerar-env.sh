@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026-present Marketing Suite LTDA
+# SPDX-License-Identifier: AGPL-3.0-only
+# See the LICENSE file for details.
+
 # Cria /opt/plane/.env a partir do .env.example, sorteando cada valor "GERAR".
 # Roda no servidor, como root. Recusa se o .env ja existe: trocar SECRET_KEY ou senha do banco
 # depois da instalacao quebra sessoes e o acesso ao Postgres ja criado.

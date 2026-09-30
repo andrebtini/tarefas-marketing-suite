@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026-present Marketing Suite LTDA
+# SPDX-License-Identifier: AGPL-3.0-only
+# See the LICENSE file for details.
+
 # Backup diario do Plane: banco (pg_dump) e anexos (volume do MinIO), em /opt/plane/backups.
 # Chamado pelo /etc/cron.d/plane. Guarda DIAS dias. Para com erro se sobrar menos de 5 GB livres.
 set -euo pipefail

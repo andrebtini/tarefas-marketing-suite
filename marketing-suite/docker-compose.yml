@@ -1,3 +1,7 @@
+# Copyright (c) 2026-present Marketing Suite LTDA
+# SPDX-License-Identifier: AGPL-3.0-only
+# See the LICENSE file for details.
+
 # Plane da Marketing Suite, em /opt/plane no VPS (tarefas.marketingsuite.online).
 # Base: deployments/cli/community/docker-compose.yml da v1.4.2, com cinco mudancas:
 #   1. imagens na tag fixa (APP_RELEASE no .env), nunca "stable";

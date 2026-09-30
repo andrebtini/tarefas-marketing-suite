@@ -1,3 +1,7 @@
+# Copyright (c) 2026-present Marketing Suite LTDA
+# SPDX-License-Identifier: AGPL-3.0-only
+# See the LICENSE file for details.
+
 # Rotina do Plane. Instalar em /etc/cron.d/plane (dono root, modo 644, nome sem ponto).
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
