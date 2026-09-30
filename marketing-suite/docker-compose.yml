@@ -78,6 +78,13 @@ x-app-env: &app-env
   LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
   WEBHOOK_ALLOWED_IPS: ""
   WEBHOOK_ALLOWED_HOSTS: ""
+  # Fase 0 (spec secao 3, F0-020): o "What's new" nao carrega mais o iframe de sites.plane.so
+  INSTANCE_CHANGELOG_URL: ""
+
+# Fase 0 (spec secao 3, F0-021): a imagem backend nao fala com a Plane nem com o GitHub
+x-hosts-bloqueados: &hosts-bloqueados
+  - "telemetry.plane.so:127.0.0.1"
+  - "api.github.com:127.0.0.1"
 
 x-logs: &logs
   logging:
@@ -122,6 +129,7 @@ services:
     image: makeplane/plane-backend:${APP_RELEASE}
     command: ./bin/docker-entrypoint-api.sh
     restart: unless-stopped
+    extra_hosts: *hosts-bloqueados
     mem_limit: 768m
     volumes:
       - logs_api:/code/plane/logs
@@ -134,6 +142,7 @@ services:
     image: makeplane/plane-backend:${APP_RELEASE}
     command: ./bin/docker-entrypoint-worker.sh
     restart: unless-stopped
+    extra_hosts: *hosts-bloqueados
     mem_limit: 768m
     volumes:
       - logs_worker:/code/plane/logs
@@ -146,6 +155,7 @@ services:
     image: makeplane/plane-backend:${APP_RELEASE}
     command: ./bin/docker-entrypoint-beat.sh
     restart: unless-stopped
+    extra_hosts: *hosts-bloqueados
     mem_limit: 384m
     volumes:
       - logs_beat-worker:/code/plane/logs
@@ -158,6 +168,7 @@ services:
     image: makeplane/plane-backend:${APP_RELEASE}
     command: ./bin/docker-entrypoint-migrator.sh
     restart: on-failure
+    extra_hosts: *hosts-bloqueados
     mem_limit: 768m
     volumes:
       - logs_migrator:/code/plane/logs
