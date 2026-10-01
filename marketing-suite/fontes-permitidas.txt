@@ -1,0 +1,19 @@
+# motivo: base-v1.4.2
+apps/web/app/assets/fonts/inter/bold-italic.ttf
+apps/web/app/assets/fonts/inter/bold.ttf
+apps/web/app/assets/fonts/inter/heavy-italic.ttf
+apps/web/app/assets/fonts/inter/heavy.ttf
+apps/web/app/assets/fonts/inter/light-italic.ttf
+apps/web/app/assets/fonts/inter/light.ttf
+apps/web/app/assets/fonts/inter/medium-italic.ttf
+apps/web/app/assets/fonts/inter/medium.ttf
+apps/web/app/assets/fonts/inter/regular-italic.ttf
+apps/web/app/assets/fonts/inter/regular.ttf
+apps/web/app/assets/fonts/inter/semibold-italic.ttf
+apps/web/app/assets/fonts/inter/semibold.ttf
+apps/web/app/assets/fonts/inter/thin-italic.ttf
+apps/web/app/assets/fonts/inter/thin.ttf
+apps/web/app/assets/fonts/inter/ultrabold-italic.ttf
+apps/web/app/assets/fonts/inter/ultrabold.ttf
+apps/web/app/assets/fonts/inter/ultralight-italic.ttf
+apps/web/app/assets/fonts/inter/ultralight.ttf

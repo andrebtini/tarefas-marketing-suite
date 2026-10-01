@@ -1,0 +1,108 @@
+# Copyright (c) 2026-present Marketing Suite LTDA
+# SPDX-License-Identifier: AGPL-3.0-only
+# See the LICENSE file for details.
+
+name: Checagens MS
+
+on:
+  pull_request:
+  push:
+    branches: ["**"]
+  workflow_call:
+    inputs:
+      ref:
+        description: Commit a checar. O ms-imagens passa o SHA da tag
+        type: string
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  literais:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - run: npm ci --prefix marketing-suite/ferramentas
+      - run: node marketing-suite/ferramentas/literais.mjs
+
+  chaves:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
+      - run: python3 marketing-suite/ferramentas/chaves-paridade.py
+
+  plane-no-codigo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
+      - name: Buscar plane.so e makeplane no codigo
+        run: |
+          permitidos="$(mktemp)"
+          grep -v -e '^#' -e '^$' marketing-suite/ferramentas/plane-no-codigo-permitidos.txt \
+            | sed 's/$/:/' > "$permitidos" || true
+          git grep -n -E 'plane\.so|makeplane' -- \
+            ':(glob)apps/web/**/*.ts' ':(glob)apps/web/**/*.tsx' ':(glob)apps/web/**/*.html' \
+            ':(glob)apps/admin/**/*.ts' ':(glob)apps/admin/**/*.tsx' ':(glob)apps/admin/**/*.html' \
+            ':(glob)apps/space/**/*.ts' ':(glob)apps/space/**/*.tsx' ':(glob)apps/space/**/*.html' \
+            ':(glob)packages/constants/src/**/*.ts' \
+            | grep -vE '^[^:]+:[0-9]+:[[:space:]]*(//|\*|/\*|\{/\*)' \
+            | grep -vFf "$permitidos" > /tmp/achados.txt || true
+          if [ -s /tmp/achados.txt ]; then
+            cat /tmp/achados.txt
+            exit 1
+          fi
+
+  satoshi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 0
+      - run: pip install fonttools brotli
+      - run: bash marketing-suite/scripts/checar-fontes.sh
+
+  migracao:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get update && sudo apt-get install -y libpq-dev
+      - run: pip install -r requirements/base.txt
+        working-directory: apps/api
+      - run: python manage.py makemigrations --check --dry-run
+        working-directory: apps/api
+
+  spdx:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
+      - name: Cabecalho SPDX nos arquivos novos
+        run: |
+          saida="$(
+            { sed -n 's/^| `\([^`]*\)` | novo |.*/\1/p' marketing-suite/PATCHES.md | grep -E '\.(ts|tsx|js|mjs|css|py|sh|yml|yaml|html)$|Dockerfile'
+              ls marketing-suite/*.yml marketing-suite/*.sh marketing-suite/scripts/*.sh 2>/dev/null
+              echo marketing-suite/plane.cron; echo marketing-suite/.env.example; } \
+              | sort -u | while read -r f; do head -6 "$f" | grep -q 'SPDX-License-Identifier: AGPL-3.0-only' || echo "SEM SPDX: $f"; done
+          )"
+          if [ -n "$saida" ]; then
+            echo "$saida"
+            exit 1
+          fi

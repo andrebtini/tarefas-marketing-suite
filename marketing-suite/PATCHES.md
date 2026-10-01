@@ -14,3 +14,9 @@ Base: v1.4.2
 | `.github/workflows/check-version.yml` | removido | build | BLD-003 | Versão do upstream em pull request para master. Reaplicar: apagar de novo se a base nova trouxer o arquivo. |
 | `.github/workflows/pull-request-build-lint-api.yml` | removido | build | BLD-003 | Lint da API do upstream. Reaplicar: apagar de novo se a base nova trouxer o arquivo. |
 | `.github/workflows/pull-request-build-lint-web-apps.yml` | removido | build | BLD-003 | Lint do web do upstream. Reaplicar: apagar de novo se a base nova trouxer o arquivo. |
+| `.github/workflows/ms-checks.yml` | novo | build | BLD-005 | Seis checagens em todo push e pull request. |
+| `.github/workflows/ms-imagens.yml` | novo | build | BLD-004 | Publica as quatro imagens a partir de uma tag ms. |
+| `.gitignore` | editado | licença | LIC-020 | Exceção para marketing-suite/scripts e para o package-lock das ferramentas. |
+| `marketing-suite/ferramentas/chaves-paridade.py` | novo | build | BLD-005 | Compara as chaves achatadas de en e pt-BR. |
+| `marketing-suite/ferramentas/literais.mjs` | novo | build | TXT-030 | Scanner de texto visível. A allowlist nasce com a base v1.4.2. |
+| `marketing-suite/scripts/checar-fontes.sh` | novo | licença | LIC-020 | F1 a F6. O F7 roda na imagem. |

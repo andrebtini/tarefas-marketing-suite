@@ -111,6 +111,9 @@ build/
 temp/
 scripts/
 !packages/i18n/scripts/
+# MS: scripts e ferramentas da Marketing Suite (LIC-020)
+!marketing-suite/scripts/
+!marketing-suite/ferramentas/package-lock.json
 
 # i18n auto-generated types (regenerated on every build)
 packages/i18n/src/types/keys.generated.ts

@@ -1,0 +1,149 @@
+# Copyright (c) 2026-present Marketing Suite LTDA
+# SPDX-License-Identifier: AGPL-3.0-only
+# See the LICENSE file for details.
+
+name: Imagens MS
+
+on:
+  push:
+    tags:
+      - "v*.*.*-ms.*"
+  workflow_dispatch:
+    inputs:
+      imagem:
+        description: Qual imagem publicar
+        type: choice
+        options: [todas, web, admin, space, backend]
+        default: todas
+      versao:
+        description: Tag git ja existente, ex. v1.4.2-ms.1-rc.1
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  montar:
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.meta.outputs.sha }}
+      versao: ${{ steps.meta.outputs.versao }}
+      data: ${{ steps.meta.outputs.data }}
+      matriz: ${{ steps.meta.outputs.matriz }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - id: meta
+        env:
+          EVENTO: ${{ github.event_name }}
+          VERSAO_ENTRADA: ${{ inputs.versao }}
+          IMAGEM_ENTRADA: ${{ inputs.imagem }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENTO" = "push" ]; then
+            versao="$GITHUB_REF_NAME"
+            escolha="todas"
+          else
+            versao="$VERSAO_ENTRADA"
+            escolha="$IMAGEM_ENTRADA"
+          fi
+          printf '%s' "$versao" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+-ms\.[0-9]+(-rc\.[0-9]+)?$' \
+            || { echo "versao invalida: $versao"; exit 1; }
+          sha="$(git rev-parse -q --verify "refs/tags/$versao^{commit}")" \
+            || { echo "a tag nao existe no origin: $versao"; exit 1; }
+          printf '%s' "$sha" | grep -Eq '^[0-9a-f]{40}$' \
+            || { echo "sha invalido: $sha"; exit 1; }
+          data="$(git log -1 --format=%cs "$sha")"
+          itens=""
+          for par in \
+            "web|apps/web/Dockerfile.web|.|/usr/share/nginx/html" \
+            "admin|apps/admin/Dockerfile.admin|.|/usr/share/nginx/html/god-mode" \
+            "space|apps/space/Dockerfile.space|.|/app/apps/space/build" \
+            "backend|apps/api/Dockerfile.api|apps/api|"; do
+            IFS='|' read -r nome arquivo contexto pasta <<< "$par"
+            if [ "$escolha" = "todas" ] || [ "$escolha" = "$nome" ]; then
+              itens="${itens:+$itens,}{\"nome\":\"$nome\",\"arquivo\":\"$arquivo\",\"contexto\":\"$contexto\",\"pasta\":\"$pasta\"}"
+            fi
+          done
+          [ -n "$itens" ] || { echo "imagem invalida: $escolha"; exit 1; }
+          {
+            echo "versao=$versao"
+            echo "sha=$sha"
+            echo "data=$data"
+            echo "matriz=[$itens]"
+          } >> "$GITHUB_OUTPUT"
+
+  checagens:
+    needs: montar
+    uses: ./.github/workflows/ms-checks.yml
+    with:
+      ref: ${{ needs.montar.outputs.sha }}
+
+  imagem:
+    needs: [montar, checagens]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.montar.outputs.matriz) }}
+    env:
+      IMAGEM: ghcr.io/andrebtini/tarefas-ms-${{ matrix.nome }}:${{ needs.montar.outputs.versao }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.montar.outputs.sha }}
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Recusar tag ja publicada
+        run: |
+          if docker manifest inspect "$IMAGEM" > /dev/null 2>&1; then
+            echo "A tag ja existe no ghcr: $IMAGEM. Tag publicada nao se sobrescreve."
+            exit 1
+          fi
+      - name: Montar a imagem, sem publicar
+        uses: docker/build-push-action@v7
+        with:
+          context: ${{ matrix.contexto }}
+          file: ${{ matrix.arquivo }}
+          platforms: linux/amd64
+          load: true
+          push: false
+          tags: ${{ env.IMAGEM }}
+          cache-from: type=gha,scope=${{ matrix.nome }}
+          cache-to: type=gha,scope=${{ matrix.nome }},mode=max
+          build-args: |
+            VITE_MS_COMMIT_SHA=${{ needs.montar.outputs.sha }}
+            VITE_MS_VERSAO=${{ needs.montar.outputs.versao }}
+            VITE_MS_DATA_VERSAO=${{ needs.montar.outputs.data }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/andrebtini/tarefas-marketing-suite
+            org.opencontainers.image.revision=${{ needs.montar.outputs.sha }}
+            org.opencontainers.image.version=${{ needs.montar.outputs.versao }}
+            org.opencontainers.image.licenses=AGPL-3.0-only
+            org.opencontainers.image.description=Versao modificada do Plane pela Marketing Suite. Codigo-fonte: https://github.com/andrebtini/tarefas-marketing-suite/tree/${{ needs.montar.outputs.sha }}
+      - name: Checar a imagem antes de publicar
+        env:
+          SHA: ${{ needs.montar.outputs.sha }}
+          PASTA: ${{ matrix.pasta }}
+        run: |
+          set -euo pipefail
+          ctr="$(docker create "$IMAGEM")"
+          docker export "$ctr" | tar -t > /tmp/arquivos-da-imagem.txt
+          docker rm "$ctr" > /dev/null
+          if grep -i satoshi /tmp/arquivos-da-imagem.txt; then
+            echo "ERRO: arquivo da Satoshi dentro da imagem (LIC-020, F7)"
+            exit 1
+          fi
+          if [ -n "$PASTA" ]; then
+            achou="$(docker run --rm --entrypoint sh "$IMAGEM" -c "grep -rl \"$SHA\" '$PASTA' | head -1")"
+            [ -n "$achou" ] || { echo "ERRO: o SHA nao esta em $PASTA (LIC-004)"; exit 1; }
+          fi
+      - name: Publicar
+        run: docker push "$IMAGEM"
