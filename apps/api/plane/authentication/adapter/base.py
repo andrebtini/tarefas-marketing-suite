@@ -23,6 +23,8 @@ from plane.bgtasks.user_activation_email_task import user_activation_email
 
 # Module imports
 from plane.db.models import FileAsset, Profile, User, WorkspaceMemberInvite
+# MS: idioma e semana do perfil novo (IDI-006)
+from plane.utils.ms_marca import MS_IDIOMA
 from plane.license.utils.instance_value import get_configuration_value
 from plane.settings.storage import S3Storage
 from plane.utils.exception_logger import log_exception
@@ -387,7 +389,8 @@ class Adapter:
                     user.avatar = avatar
 
             # Create profile
-            Profile.objects.create(user=user)
+            # MS: pt-BR e semana na segunda (IDI-006)
+            Profile.objects.create(user=user, language=MS_IDIOMA, start_of_the_week=Profile.MONDAY)
 
         # Check if IDP sync is enabled and user is not signing up
         if self.check_sync_enabled() and not is_signup:

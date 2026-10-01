@@ -29,3 +29,11 @@ Base: v1.4.2
 | `apps/admin/app/root.tsx` | editado | tema | VIS-011 | Link da Satoshi antes do CSS global. |
 | `apps/space/app/root.tsx` | editado | tema | VIS-011 | Link da Satoshi antes do CSS global. |
 | `marketing-suite/fase0/marca.css` | editado | tema | F0-018 | Tokens saem deste arquivo e ficam em ms-tema.css. |
+| `apps/api/plane/utils/ms_marca.py` | novo | backend | ARQ-014 | Constantes da marca e MS_IDIOMA para o perfil novo. |
+| `packages/i18n/src/constants/language.ts` | editado | idioma | IDI-001 | DEFAULT_LANGUAGE pt-BR. FALLBACK continua en. |
+| `packages/i18n/src/index.ts` | editado | idioma | IDI-001 | Exporta DEFAULT_LANGUAGE. |
+| `packages/i18n/src/core/instance.ts` | editado | idioma | IDI-002 | Idioma inicial e localStorage ficam em pt-BR. |
+| `apps/web/core/store/root.store.ts` | editado | idioma | IDI-003 | Sair nao volta o idioma para en. |
+| `apps/web/core/store/user/profile.store.ts` | editado | idioma | IDI-004 | Perfil aplica e envia pt-BR. |
+| `apps/web/core/components/settings/profile/content/pages/preferences/language-and-timezone-list.tsx` | editado | idioma | IDI-007 | Seletor de idioma sai da tela. Fuso e semana ficam. |
+| `apps/web/core/components/power-k/config/preferences-commands.ts` | editado | idioma | IDI-007 | Comando de idioma fica invisivel. |

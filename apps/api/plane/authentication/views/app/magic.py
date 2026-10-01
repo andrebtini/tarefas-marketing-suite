@@ -22,6 +22,8 @@ from plane.bgtasks.magic_link_code_task import magic_link
 from plane.license.models import Instance
 from plane.authentication.utils.host import base_host
 from plane.db.models import User, Profile
+# MS: idioma e semana do perfil novo (IDI-006)
+from plane.utils.ms_marca import MS_IDIOMA
 from plane.authentication.adapter.error import (
     AuthenticationException,
     AUTHENTICATION_ERROR_CODES,
@@ -117,7 +119,7 @@ class MagicSignInEndpoint(View):
                 callback=post_user_auth_workflow,
             )
             user = provider.authenticate()
-            profile, _ = Profile.objects.get_or_create(user=user)
+            profile, _ = Profile.objects.get_or_create(user=user, defaults={"language": MS_IDIOMA, "start_of_the_week": Profile.MONDAY})  # noqa: E501
             # Login the user and record his device info
             user_login(request=request, user=user, is_app=True)
             if user.is_password_autoset and profile.is_onboarded:

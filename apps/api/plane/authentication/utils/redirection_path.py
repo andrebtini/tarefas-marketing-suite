@@ -3,11 +3,13 @@
 # See the LICENSE file for details.
 
 from plane.db.models import Profile, Workspace, WorkspaceMemberInvite
+# MS: idioma e semana do perfil novo (IDI-006)
+from plane.utils.ms_marca import MS_IDIOMA
 
 
 def get_redirection_path(user):
     # Handle redirections
-    profile, _ = Profile.objects.get_or_create(user=user)
+    profile, _ = Profile.objects.get_or_create(user=user, defaults={"language": MS_IDIOMA, "start_of_the_week": Profile.MONDAY})  # noqa: E501
 
     # Redirect to onboarding if the user is not onboarded yet
     if not profile.is_onboarded:

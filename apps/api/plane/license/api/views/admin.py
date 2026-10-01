@@ -31,6 +31,8 @@ from plane.license.api.serializers import (
 )
 from plane.license.models import Instance, InstanceAdmin
 from plane.db.models import User, Profile
+# MS: idioma e semana do perfil novo (IDI-006)
+from plane.utils.ms_marca import MS_IDIOMA
 from plane.utils.cache import cache_response, invalidate_cache
 from plane.authentication.utils.login import user_login
 from plane.authentication.utils.host import base_host, user_ip
@@ -241,7 +243,7 @@ class InstanceAdminSignUpEndpoint(View):
                     password=make_password(password),
                     is_password_autoset=False,
                 )
-                _ = Profile.objects.create(user=user, company_name=company_name)
+                _ = Profile.objects.create(user=user, company_name=company_name, language=MS_IDIOMA, start_of_the_week=Profile.MONDAY)  # noqa: E501
                 # settings last active for the user
                 user.is_active = True
                 user.last_active = timezone.now()
