@@ -7,6 +7,8 @@
 import type { TLanguage, ILanguageOption } from "../types";
 
 export const FALLBACK_LANGUAGE: TLanguage = "en";
+// MS: idioma padrao da instancia (IDI-001)
+export const DEFAULT_LANGUAGE: TLanguage = "pt-BR";
 
 export const SUPPORTED_LANGUAGES: ILanguageOption[] = [
   { label: "English", value: "en" },

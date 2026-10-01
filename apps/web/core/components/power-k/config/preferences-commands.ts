@@ -160,7 +160,8 @@ export const usePowerKPreferencesCommands = (): TPowerKCommandConfig[] => {
         handleUpdateUserProfile({ language });
       },
       isEnabled: () => true,
-      isVisible: () => true,
+      // MS: seletor de idioma removido (IDI-007)
+      isVisible: () => false,
       closeOnSelect: true,
     },
   ];

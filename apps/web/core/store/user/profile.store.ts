@@ -7,8 +7,7 @@
 import { cloneDeep, set } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 // plane imports
-import { setLanguage } from "@plane/i18n";
-import type { TLanguage } from "@plane/i18n";
+import { DEFAULT_LANGUAGE, setLanguage } from "@plane/i18n";
 // types
 import type { IUserTheme, TUserProfile } from "@plane/types";
 import { EStartOfTheWeek } from "@plane/types";
@@ -111,8 +110,9 @@ export class ProfileStore implements IUserProfileStore {
         this.isLoading = false;
         this.data = userProfile;
       });
+      // MS: o perfil nao escolhe outro idioma (IDI-004)
       if (userProfile.language) {
-        void setLanguage(userProfile.language as TLanguage);
+        void setLanguage(DEFAULT_LANGUAGE);
       }
       return userProfile;
     } catch (error) {
@@ -134,14 +134,16 @@ export class ProfileStore implements IUserProfileStore {
    */
   updateUserProfile = async (data: Partial<TUserProfile>): Promise<TUserProfile | undefined> => {
     const currentUserProfileData = this.data;
+    // MS: o que segue para a API fica em pt-BR (IDI-004)
+    const payload = data.language ? { ...data, language: DEFAULT_LANGUAGE } : data;
     try {
       if (currentUserProfileData) {
-        this.mutateUserProfile(data);
+        this.mutateUserProfile(payload);
       }
       if (data.language) {
-        void setLanguage(data.language as TLanguage);
+        void setLanguage(DEFAULT_LANGUAGE);
       }
-      const userProfile = await this.userService.updateCurrentUserProfile(data);
+      const userProfile = await this.userService.updateCurrentUserProfile(payload);
       return userProfile;
     } catch {
       if (currentUserProfileData) {
