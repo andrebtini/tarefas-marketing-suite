@@ -11,8 +11,6 @@ import { CycleIcon } from "@plane/propel/icons";
 import { Breadcrumbs, Header } from "@plane/ui";
 // components
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
-// plane web components
-import { UpgradeBadge } from "@/components/workspace/upgrade-badge";
 
 export const WorkspaceActiveCycleHeader = observer(function WorkspaceActiveCycleHeader() {
   const { t } = useTranslation();
@@ -29,7 +27,7 @@ export const WorkspaceActiveCycleHeader = observer(function WorkspaceActiveCycle
             }
           />
         </Breadcrumbs>
-        <UpgradeBadge size="md" />
+        {/* MS: o selo de upgrade saiu (MRC-001) */}
       </Header.LeftItem>
     </Header>
   );

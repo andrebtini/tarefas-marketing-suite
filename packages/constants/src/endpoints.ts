@@ -32,7 +32,7 @@ export const WEBSITE_URL = MS_URL_SITE;
 // support email
 // MS: ARQ-011
 export const SUPPORT_EMAIL = MS_EMAIL_SUPORTE;
-// marketing links
-export const MARKETING_PRICING_PAGE_LINK = "https://plane.so/pricing";
-export const MARKETING_CONTACT_US_PAGE_LINK = "https://plane.so/contact";
-export const MARKETING_PLANE_ONE_PAGE_LINK = "https://plane.so/one";
+// MS: links de marketing vazios (MRC-003)
+export const MARKETING_PRICING_PAGE_LINK = "";
+export const MARKETING_CONTACT_US_PAGE_LINK = "";
+export const MARKETING_PLANE_ONE_PAGE_LINK = "";

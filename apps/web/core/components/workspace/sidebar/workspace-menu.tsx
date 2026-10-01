@@ -9,7 +9,7 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Disclosure, Transition } from "@headlessui/react";
 // plane imports
-import { AnalyticsIcon, CycleIcon, ProjectIcon, ViewsIcon } from "@plane/propel/icons";
+import { AnalyticsIcon, ProjectIcon, ViewsIcon } from "@plane/propel/icons";
 import { EUserWorkspaceRoles } from "@plane/types";
 // hooks
 import useLocalStorage from "@/hooks/use-local-storage";
@@ -40,13 +40,7 @@ export const SidebarWorkspaceMenu = observer(function SidebarWorkspaceMenu() {
       access: [EUserWorkspaceRoles.ADMIN, EUserWorkspaceRoles.MEMBER, EUserWorkspaceRoles.GUEST],
       Icon: ViewsIcon,
     },
-    {
-      key: "active-cycles",
-      labelTranslationKey: "sidebar.cycles",
-      href: `/${workspaceSlug}/active-cycles/`,
-      access: [EUserWorkspaceRoles.ADMIN, EUserWorkspaceRoles.MEMBER],
-      Icon: CycleIcon,
-    },
+    // MS: o atalho de ciclos ativos saiu (MRC-001)
     {
       key: "analytics",
       labelTranslationKey: "sidebar.analytics",

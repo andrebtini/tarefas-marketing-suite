@@ -6,16 +6,16 @@
 
 import React from "react";
 import Link from "next/link";
-import { EAuthModes } from "@plane/constants";
+import { EAuthModes, MS_URL_PRIVACIDADE, MS_URL_TERMOS } from "@plane/constants";
 
 interface TermsAndConditionsProps {
   authType?: EAuthModes;
 }
 
-// Constants for better maintainability
+// MS: termos e privacidade do site da Marketing Suite (MRC-004)
 const LEGAL_LINKS = {
-  termsOfService: "https://plane.so/legals/terms-and-conditions",
-  privacyPolicy: "https://plane.so/legals/privacy-policy",
+  termsOfService: MS_URL_TERMOS,
+  privacyPolicy: MS_URL_PRIVACIDADE,
 } as const;
 
 const MESSAGES = {

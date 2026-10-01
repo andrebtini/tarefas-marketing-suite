@@ -10,7 +10,7 @@ import type { EUserWorkspaceRoles } from "./workspace";
 
 export type TProfileSettingsTabs = "general" | "preferences" | "notifications" | "security" | "api-tokens";
 
-// MS: billing-and-plans saiu (MRC-001)
+// MS: a aba de cobranca saiu (MRC-001)
 export type TWorkspaceSettingsTabs = "general" | "members" | "export" | "webhooks";
 export type TWorkspaceSettingsItem = {
   key: TWorkspaceSettingsTabs;
