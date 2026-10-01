@@ -7,7 +7,6 @@
 import { observer } from "mobx-react";
 import { HelpCircle, MoveLeft } from "lucide-react";
 import { MS_URL_GUIA_INTERNO, WEB_BASE_URL } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
 // plane internal packages
 import { NewTabIcon } from "@plane/propel/icons";
 import { Tooltip } from "@plane/propel/tooltip";
@@ -17,8 +16,8 @@ import { useTheme } from "@/hooks/store";
 
 export const AdminSidebarHelpSection = observer(function AdminSidebarHelpSection() {
   const { isSidebarCollapsed, toggleSidebar } = useTheme();
-  const { t } = useTranslation();
   const redirectionLink = encodeURI(WEB_BASE_URL + "/");
+  const rotuloGuia = "Guia interno";
 
   return (
     <div
@@ -41,12 +40,12 @@ export const AdminSidebarHelpSection = observer(function AdminSidebarHelpSection
         </Tooltip>
         {/* MS: sem URL de guia, o botao de ajuda nao aparece (MRC-002) */}
         {MS_URL_GUIA_INTERNO ? (
-          <Tooltip tooltipContent={t("ms.common.guia_interno")} position={isSidebarCollapsed ? "right" : "top"} className="ml-4">
+          <Tooltip tooltipContent={rotuloGuia} position={isSidebarCollapsed ? "right" : "top"} className="ml-4">
             <a
               href={MS_URL_GUIA_INTERNO}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={t("ms.common.guia_interno")}
+              aria-label={rotuloGuia}
               className={`ml-auto grid place-items-center rounded-md p-1.5 text-secondary outline-none hover:bg-layer-1-hover hover:text-primary ${
                 isSidebarCollapsed ? "w-full" : ""
               }`}

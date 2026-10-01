@@ -6,6 +6,7 @@
 
 import type { ReactNode } from "react";
 import { Links, Meta, Outlet, Scripts } from "react-router";
+import { MS_COMMIT_SHA } from "@plane/constants";
 import type { LinksFunction } from "react-router";
 import appleTouchIcon from "@/app/assets/favicon/apple-touch-icon.png?url";
 import favicon16 from "@/app/assets/favicon/favicon-16x16.png?url";
@@ -47,6 +48,8 @@ export function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
+        {/* MS: commit da imagem (LIC-004) */}
+        <meta name="ms-commit" content={MS_COMMIT_SHA} />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
