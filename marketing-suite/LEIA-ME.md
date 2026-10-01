@@ -53,15 +53,21 @@ clpctl lets-encrypt:install:certificate --domainName=tarefas.marketingsuite.onli
 
 No arquivo do nginx (`/etc/nginx/sites-enabled/tarefas.marketingsuite.online.conf`) entraram:
 - a linha `X-Robots-Tag` (subdomínio interno, fora da busca);
-- um `sub_filter` que injeta `<style id="ms-oculta">` no HTML e esconde o botão "Star us on GitHub"
-  e o selo "Community" (com a barra do rodapé da lateral), sem mexer nas imagens oficiais. Depende
-  do `href` do GitHub, do `aria-label` do selo e das classes `h-12 border-t`: conferir depois de
-  cada atualização do Plane;
+- um `sub_filter` que injeta o script `ms-marca-js` no HTML. Ele recoloca o CSS da marca
+  (`/ms/marca.css`) depois que o React troca o `<html>`, e grava o idioma `pt-BR` no navegador.
+  O `Accept-Encoding` vai vazio nessa rota para o filtro enxergar o HTML. Um `map` manda
+  `Cache-Control: no-cache` só no HTML. O `location ^~ /ms/` serve a pasta `/ms/` direto do
+  disco, com cache longo no CSS. A pasta `fase0/` deste repositório guarda o CSS, o trecho do
+  nginx e os scripts de dados dessa publicação;
 - de 29/09/2026, uma trava que deixava `/god-mode` aberto só para um IP, já retirada depois que o
   administrador foi criado.
 
 Cópias do arquivo antes de cada mudança ficam em `/root/tarefas.marketingsuite.online.conf.antes-*`.
-**Salvar o site pela tela do CloudPanel pode regravar esse arquivo e apagar as três mudanças.**
+**Salvar o site pela tela do CloudPanel pode regravar esse arquivo e apagar o script, o `map`,
+o `/ms/` e o `Accept-Encoding`.** Depois de qualquer ação no CloudPanel, conferir
+`grep -c 'ms-marca-js' /etc/nginx/sites-enabled/tarefas.marketingsuite.online.conf`
+(esperado `1`). Se der `0`, reaplicar `fase0/nginx-tarefas.trecho.conf`. Os arquivos de `/ms/`
+continuam no disco.
 
 ## Primeiro acesso
 
