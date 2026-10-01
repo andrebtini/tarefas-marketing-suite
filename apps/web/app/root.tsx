@@ -46,6 +46,8 @@ export const links: LinksFunction = () => [
   { rel: "apple-touch-icon", sizes: "180x180", href: icon180 },
   { rel: "apple-touch-icon", sizes: "512x512", href: icon512 },
   { rel: "manifest", href: "/manifest.json" },
+  // MS: Satoshi pela CDN (VIS-011)
+  { rel: "stylesheet", href: "https://api.fontshare.com/v2/css?f[]=satoshi@1&display=swap" },
   { rel: "stylesheet", href: globalStyles },
   {
     rel: "preload",

@@ -20,3 +20,12 @@ Base: v1.4.2
 | `marketing-suite/ferramentas/chaves-paridade.py` | novo | build | BLD-005 | Compara as chaves achatadas de en e pt-BR. |
 | `marketing-suite/ferramentas/literais.mjs` | novo | build | TXT-030 | Scanner de texto visível. A allowlist nasce com a base v1.4.2. |
 | `marketing-suite/scripts/checar-fontes.sh` | novo | licença | LIC-020 | F1 a F6. O F7 roda na imagem. |
+| `packages/tailwind-config/ms-tema.css` | novo | tema | ARQ-009 | Tokens da secao 4. Nao editar variables.css. |
+| `packages/tailwind-config/index.css` | editado | tema | ARQ-009 | Importa ms-tema.css depois de animations.css. |
+| `packages/constants/src/ms-marca.ts` | novo | marca | ARQ-011 | Constantes MS_ do produto. |
+| `packages/constants/src/index.ts` | editado | marca | ARQ-011 | Exporta ms-marca. |
+| `packages/constants/src/endpoints.ts` | editado | marca | ARQ-011 | WEBSITE_URL e SUPPORT_EMAIL deixam de usar plane.so. |
+| `apps/web/app/root.tsx` | editado | tema | VIS-011 | Link da Satoshi antes do CSS global. |
+| `apps/admin/app/root.tsx` | editado | tema | VIS-011 | Link da Satoshi antes do CSS global. |
+| `apps/space/app/root.tsx` | editado | tema | VIS-011 | Link da Satoshi antes do CSS global. |
+| `marketing-suite/fase0/marca.css` | editado | tema | F0-018 | Tokens saem deste arquivo e ficam em ms-tema.css. |

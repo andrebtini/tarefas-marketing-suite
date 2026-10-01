@@ -48,3 +48,5 @@ export * from "./user";
 export * from "./views";
 export * from "./workspace-drafts";
 export * from "./workspace";
+// MS: constantes da marca (ARQ-011)
+export * from "./ms-marca";

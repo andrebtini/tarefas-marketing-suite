@@ -33,6 +33,8 @@ export const links: Route.LinksFunction = () => [
   { rel: "icon", type: "image/png", sizes: "16x16", href: favicon16 },
   { rel: "shortcut icon", href: faviconIco },
   { rel: "manifest", href: siteWebmanifest },
+  // MS: Satoshi pela CDN (VIS-011)
+  { rel: "stylesheet", href: "https://api.fontshare.com/v2/css?f[]=satoshi@1&display=swap" },
   { rel: "stylesheet", href: globalStyles },
   {
     rel: "preload",

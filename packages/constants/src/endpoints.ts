@@ -4,6 +4,9 @@
  * See the LICENSE file for details.
  */
 
+// MS: site e suporte deixam de apontar para a Plane (ARQ-011)
+import { MS_EMAIL_SUPORTE, MS_URL_SITE } from "./ms-marca";
+
 export const API_BASE_URL = process.env.VITE_API_BASE_URL || "";
 export const API_BASE_PATH = process.env.VITE_API_BASE_PATH || "";
 export const API_URL = encodeURI(`${API_BASE_URL}${API_BASE_PATH}`);
@@ -24,9 +27,11 @@ export const WEB_BASE_URL = process.env.VITE_WEB_BASE_URL || "";
 export const WEB_BASE_PATH = process.env.VITE_WEB_BASE_PATH || "";
 export const WEB_URL = encodeURI(`${WEB_BASE_URL}${WEB_BASE_PATH}`);
 // plane website url
-export const WEBSITE_URL = process.env.VITE_WEBSITE_URL || "https://plane.so";
+// MS: ARQ-011
+export const WEBSITE_URL = MS_URL_SITE;
 // support email
-export const SUPPORT_EMAIL = process.env.VITE_SUPPORT_EMAIL || "support@plane.so";
+// MS: ARQ-011
+export const SUPPORT_EMAIL = MS_EMAIL_SUPORTE;
 // marketing links
 export const MARKETING_PRICING_PAGE_LINK = "https://plane.so/pricing";
 export const MARKETING_CONTACT_US_PAGE_LINK = "https://plane.so/contact";
