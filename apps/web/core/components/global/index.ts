@@ -4,6 +4,5 @@
  * See the LICENSE file for details.
  */
 
-export * from "./product-updates";
-
+// MS: product-updates saiu com o menu de ajuda (MRC-002)
 export * from "./timezone-select";

@@ -37,3 +37,7 @@ Base: v1.4.2
 | `apps/web/core/store/user/profile.store.ts` | editado | idioma | IDI-004 | Perfil aplica e envia pt-BR. |
 | `apps/web/core/components/settings/profile/content/pages/preferences/language-and-timezone-list.tsx` | editado | idioma | IDI-007 | Seletor de idioma sai da tela. Fuso e semana ficam. |
 | `apps/web/core/components/power-k/config/preferences-commands.ts` | editado | idioma | IDI-007 | Comando de idioma fica invisivel. |
+| pps/web/app/(all)/[workspaceSlug]/(settings)/settings/(workspace)/billing/header.tsx | removido | venda | MRC-001 | Pagina de cobranca sai do app. |
+| pps/web/app/(all)/[workspaceSlug]/(settings)/settings/(workspace)/billing/page.tsx | removido | venda | MRC-001 | Pagina de cobranca sai do app. |
+| pps/web/core/components/workspace/billing/ | removido | venda | MRC-001 | Comparacao de planos sai do app. |
+| pps/web/core/components/global/product-updates/ | removido | venda | MRC-002 | Modal What's new sai com o menu de ajuda. |

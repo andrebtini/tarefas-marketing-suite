@@ -867,5 +867,10 @@
       "description": "Exporte itens de trabalho para um arquivo JSON.",
       "short_description": "Exportar como JSON"
     }
+  },
+  "ms": {
+    "common": {
+      "guia_interno": "Guia interno"
+    }
   }
 }
