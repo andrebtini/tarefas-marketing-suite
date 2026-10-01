@@ -87,6 +87,12 @@ jobs:
         working-directory: apps/api
       - run: python manage.py makemigrations --check --dry-run
         working-directory: apps/api
+        env:
+          REDIS_URL: redis://127.0.0.1:6379
+          POSTGRES_HOST: 127.0.0.1
+          POSTGRES_DB: plane
+          POSTGRES_USER: plane
+          POSTGRES_PASSWORD: plane
 
   spdx:
     runs-on: ubuntu-latest
