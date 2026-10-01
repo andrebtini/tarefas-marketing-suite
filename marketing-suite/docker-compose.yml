@@ -96,21 +96,21 @@ x-logs: &logs
 services:
   web:
     <<: *logs
-    image: makeplane/plane-frontend:${APP_RELEASE}
+    image: ghcr.io/andrebtini/tarefas-ms-web:${MS_RELEASE}
     restart: unless-stopped
     mem_limit: 128m
     depends_on: [api, worker]
 
   space:
     <<: *logs
-    image: makeplane/plane-space:${APP_RELEASE}
+    image: ghcr.io/andrebtini/tarefas-ms-space:${MS_RELEASE}
     restart: unless-stopped
     mem_limit: 256m
     depends_on: [api, worker, web]
 
   admin:
     <<: *logs
-    image: makeplane/plane-admin:${APP_RELEASE}
+    image: ghcr.io/andrebtini/tarefas-ms-admin:${MS_RELEASE}
     restart: unless-stopped
     mem_limit: 128m
     depends_on: [api, web]
@@ -126,7 +126,7 @@ services:
 
   api:
     <<: *logs
-    image: makeplane/plane-backend:${APP_RELEASE}
+    image: ghcr.io/andrebtini/tarefas-ms-backend:${MS_RELEASE}
     command: ./bin/docker-entrypoint-api.sh
     restart: unless-stopped
     extra_hosts: *hosts-bloqueados
@@ -139,7 +139,7 @@ services:
 
   worker:
     <<: *logs
-    image: makeplane/plane-backend:${APP_RELEASE}
+    image: ghcr.io/andrebtini/tarefas-ms-backend:${MS_RELEASE}
     command: ./bin/docker-entrypoint-worker.sh
     restart: unless-stopped
     extra_hosts: *hosts-bloqueados
@@ -152,7 +152,7 @@ services:
 
   beat-worker:
     <<: *logs
-    image: makeplane/plane-backend:${APP_RELEASE}
+    image: ghcr.io/andrebtini/tarefas-ms-backend:${MS_RELEASE}
     command: ./bin/docker-entrypoint-beat.sh
     restart: unless-stopped
     extra_hosts: *hosts-bloqueados
@@ -165,7 +165,7 @@ services:
 
   migrator:
     <<: *logs
-    image: makeplane/plane-backend:${APP_RELEASE}
+    image: ghcr.io/andrebtini/tarefas-ms-backend:${MS_RELEASE}
     command: ./bin/docker-entrypoint-migrator.sh
     restart: on-failure
     extra_hosts: *hosts-bloqueados
