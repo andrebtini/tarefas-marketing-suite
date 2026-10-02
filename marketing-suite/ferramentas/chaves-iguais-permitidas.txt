@@ -1,0 +1,39 @@
+# Copyright (c) 2026-present Marketing Suite LTDA
+# SPDX-License-Identifier: AGPL-3.0-only
+# See the LICENSE file for details.
+# Valores que podem continuar iguais ao ingles (IDI-008). Um por linha.
+GitHub
+GitHub Enterprise
+Gitlab
+Gitlab Enterprise
+Slack
+Sentry
+Bitbucket Data Center
+OAuth Bridge
+Excel
+Linear
+Fibonacci
+API
+URL
+JSON
+CSV
+IdP
+Cron
+Client Secret
+Webhook Secret
+Redirect URIs
+min
+Link
+Links
+Layout
+Webhooks
+Backlog
+Global
+Manual
+Ideal
+Avatar
+Modal
+Contextual
+Beta
+Info
+Scripts

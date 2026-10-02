@@ -48,10 +48,17 @@ export function UserGreetingsView(props: IUserGreetingsView) {
   return (
     <div className="my-6 flex flex-col items-center">
       <h2 className="text-center text-20 font-semibold">
-        {t("good")} {t(greeting)}, {user?.first_name} {user?.last_name}
+        {/* MS: saudacao inteira, sem emoji (IDI-009) */}
+        {t(
+          greeting === "morning"
+            ? "ms.common.saudacao.manha"
+            : greeting === "afternoon"
+              ? "ms.common.saudacao.tarde"
+              : "ms.common.saudacao.noite"
+        )}
+        , {user?.first_name} {user?.last_name}
       </h2>
       <h5 className="flex items-center gap-2 font-medium text-placeholder">
-        <div>{greeting === "morning" ? "🌤️" : greeting === "afternoon" ? "🌥️" : "🌙️"}</div>
         <div>
           {weekDay}, {date} {timeString}
         </div>

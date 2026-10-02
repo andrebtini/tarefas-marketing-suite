@@ -15,7 +15,7 @@
       "create": {
         "success": {
           "title": "Reação criada",
-          "message": "A reação foi criada com sucesso."
+          "message": "A reação foi criada."
         },
         "error": {
           "title": "Reação não criada",
@@ -25,7 +25,7 @@
       "remove": {
         "success": {
           "title": "Reação removida",
-          "message": "A reação foi removida com sucesso."
+          "message": "A reação foi removida."
         },
         "error": {
           "title": "Reação não removida",
@@ -36,7 +36,7 @@
     "create": {
       "success": {
         "title": "Atualização criada",
-        "message": "A atualização foi criada com sucesso."
+        "message": "A atualização foi criada."
       },
       "error": {
         "title": "Atualização não criada",
@@ -44,21 +44,21 @@
       }
     },
     "delete": {
-      "title": "Deletar atualização",
-      "confirmation": "Você tem certeza que deseja deletar esta atualização? Esta operação é irreversível.",
+      "title": "Excluir atualização",
+      "confirmation": "Você tem certeza que deseja excluir esta atualização? Esta operação é irreversível.",
       "success": {
-        "title": "Atualização deletada",
-        "message": "A atualização foi deletada com sucesso."
+        "title": "Atualização excluída",
+        "message": "A atualização foi excluída."
       },
       "error": {
-        "title": "Atualização não deletada",
-        "message": "A atualização não foi deletada."
+        "title": "Atualização não excluída",
+        "message": "A atualização não foi excluída."
       }
     },
     "update": {
       "success": {
         "title": "Atualização atualizada",
-        "message": "A atualização foi atualizada com sucesso."
+        "message": "A atualização foi atualizada."
       },
       "error": {
         "title": "Atualização não atualizada",

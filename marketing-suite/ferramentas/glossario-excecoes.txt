@@ -1,0 +1,14 @@
+# Copyright (c) 2026-present Marketing Suite LTDA
+# SPDX-License-Identifier: AGPL-3.0-only
+# See the LICENSE file for details.
+# namespace:chave	regra	motivo
+integration:oauth_bridge_integration.provider_form.user_claims_placeholder	email	nome de claim do token, nao e texto
+project:project.members_import.description	email	cabecalho de coluna do CSV
+workspace:workspace.members_import.description	email	cabecalho de coluna do CSV
+common:cloud_maintenance_message.status_page	status	pagina de status e o nome da pagina externa
+common:preview	visualizacao	previa, nao a entidade
+common:common.side_peek	visualizacao	visualizacao lateral (espiada)
+common:common.close_peek_view	visualizacao	espiada
+common:common.toggle_peek_view_layout	visualizacao	espiada
+project-settings:project_settings.members.guest_super_permissions.title	visualizacao	acesso de visualizacao e permissao de leitura
+project-settings:project_settings.members.guest_super_permissions.sub_heading	visualizacao	o mesmo

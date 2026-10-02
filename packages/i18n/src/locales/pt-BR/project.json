@@ -19,9 +19,9 @@
     "start_date": "Data de início",
     "end_date": "Data de término",
     "in_your_timezone": "No seu fuso horário",
-    "transfer_work_items": "Transferir {count} itens de trabalho",
+    "transfer_work_items": "Transferir {count} tarefas",
     "transfer": {
-      "no_cycles_available": "Não há outros ciclos disponíveis para transferir itens de trabalho."
+      "no_cycles_available": "Não há outros ciclos disponíveis para transferir tarefas."
     },
     "date_range": "Intervalo de datas",
     "add_date": "Adicionar data",
@@ -29,9 +29,9 @@
       "label": "Ciclo ativo",
       "progress": "Progresso",
       "chart": "Gráfico de burndown",
-      "priority_issue": "Itens de trabalho prioritários",
+      "priority_issue": "Tarefas prioritários",
       "assignees": "Responsáveis",
-      "issue_burndown": "Burndown de itens de trabalho",
+      "issue_burndown": "Burndown de tarefas",
       "ideal": "Ideal",
       "current": "Atual",
       "labels": "Etiquetas",
@@ -60,40 +60,40 @@
         },
         "failed": {
           "title": "Falha ao restaurar o ciclo",
-          "description": "Não foi possível restaurar o ciclo. Por favor, tente novamente."
+          "description": "Não foi possível restaurar o ciclo., tente novamente."
         }
       },
       "favorite": {
         "loading": "Adicionando ciclo aos favoritos",
         "success": {
           "description": "Ciclo adicionado aos favoritos.",
-          "title": "Sucesso!"
+          "title": "Pronto."
         },
         "failed": {
-          "description": "Não foi possível adicionar o ciclo aos favoritos. Por favor, tente novamente.",
-          "title": "Erro!"
+          "description": "Não foi possível adicionar o ciclo aos favoritos., tente novamente.",
+          "title": "Erro."
         }
       },
       "unfavorite": {
         "loading": "Removendo ciclo dos favoritos",
         "success": {
           "description": "Ciclo removido dos favoritos.",
-          "title": "Sucesso!"
+          "title": "Pronto."
         },
         "failed": {
-          "description": "Não foi possível remover o ciclo dos favoritos. Por favor, tente novamente.",
-          "title": "Erro!"
+          "description": "Não foi possível remover o ciclo dos favoritos., tente novamente.",
+          "title": "Erro."
         }
       },
       "update": {
         "loading": "Atualizando ciclo",
         "success": {
-          "description": "Ciclo atualizado com sucesso.",
-          "title": "Sucesso!"
+          "description": "Ciclo atualizado.",
+          "title": "Pronto."
         },
         "failed": {
-          "description": "Erro ao atualizar o ciclo. Por favor, tente novamente.",
-          "title": "Erro!"
+          "description": "Erro ao atualizar o ciclo., tente novamente.",
+          "title": "Erro."
         },
         "error": {
           "already_exists": "Você já tem um ciclo nas datas fornecidas, se você quiser criar um ciclo de rascunho, você pode fazer isso removendo ambas as datas."
@@ -113,18 +113,18 @@
         }
       },
       "no_issues": {
-        "title": "Nenhum item de trabalho adicionado ao ciclo",
-        "description": "Adicione ou crie itens de trabalho que você deseja definir prazos e entregar dentro deste ciclo",
+        "title": "Nenhuma tarefa adicionado ao ciclo",
+        "description": "Adicione ou crie tarefas que você deseja definir prazos e entregar dentro deste ciclo",
         "primary_button": {
-          "text": "Criar novo item de trabalho"
+          "text": "Criar nova tarefa"
         },
         "secondary_button": {
-          "text": "Adicionar item de trabalho existente"
+          "text": "Adicionar tarefa existente"
         }
       },
       "completed_no_issues": {
-        "title": "Nenhum item de trabalho no ciclo",
-        "description": "Nenhum item de trabalho no ciclo. Os itens de trabalho são transferidos ou ocultos. Para ver os itens de trabalho ocultos, se houver, atualize suas propriedades de exibição de acordo."
+        "title": "Nenhuma tarefa no ciclo",
+        "description": "Nenhuma tarefa no ciclo. As tarefas são transferidos ou ocultos. Para ver as tarefas ocultos, se houver, atualize suas propriedades de exibição de acordo."
       },
       "active": {
         "title": "Nenhum ciclo ativo",
@@ -139,29 +139,29 @@
   "project_views": {
     "empty_state": {
       "general": {
-        "title": "Salve visualizações filtradas para o seu projeto. Crie quantas precisar",
-        "description": "As visualizações são um conjunto de filtros salvos que você usa com frequência ou deseja acesso fácil. Todos os seus colegas em um projeto podem ver as visualizações de todos e escolher o que melhor se adapta às suas necessidades.",
+        "title": "Salve visões filtradas para o seu projeto. Crie quantas precisar",
+        "description": "As visões são um conjunto de filtros salvos que você usa com frequência ou deseja acesso fácil. Todos os seus colegas em um projeto podem ver as visões de todos e escolher o que melhor se adapta às suas necessidades.",
         "primary_button": {
-          "text": "Crie sua primeira visualização",
+          "text": "Crie sua primeira visão",
           "comic": {
-            "title": "As visualizações funcionam sobre as propriedades do item de trabalho.",
-            "description": "Você pode criar uma visualização a partir daqui com quantas propriedades como filtros que você achar adequado."
+            "title": "As visões funcionam sobre as propriedades da tarefa.",
+            "description": "Você pode criar uma visão a partir daqui com quantas propriedades como filtros que você achar adequado."
           }
         },
         "filter": {
-          "title": "Nenhuma visualização correspondente",
-          "description": "Nenhuma visualização corresponde aos critérios de pesquisa.\n Crie uma nova visualização em vez disso."
+          "title": "Nenhuma visão correspondente",
+          "description": "Nenhuma visão corresponde aos critérios de pesquisa. Crie uma nova visão em vez disso."
         }
       },
       "no_archived_issues": {
-        "title": "Ainda não há itens de trabalho arquivados",
-        "description": "Manualmente ou através de automação, você pode arquivar itens de trabalho concluídos ou cancelados. Encontre-os aqui depois de arquivados.",
+        "title": "Ainda não há tarefas arquivadas",
+        "description": "Manualmente ou através de automação, você pode arquivar tarefas concluídas ou cancelados. Encontre-os aqui depois de arquivados.",
         "primary_button": {
           "text": "Definir automação"
         }
       },
       "issues_empty_filter": {
-        "title": "Nenhum item de trabalho encontrado correspondente aos filtros aplicados",
+        "title": "Nenhuma tarefa encontrado correspondente aos filtros aplicados",
         "secondary_button": {
           "text": "Limpar todos os filtros"
         }
@@ -183,32 +183,32 @@
       }
     },
     "delete_view": {
-      "title": "Tem certeza de que deseja excluir esta visualização?",
-      "content": "Se você confirmar, todas as opções de classificação, filtro e exibição + o layout que você escolheu para esta visualização serão excluídos permanentemente sem nenhuma maneira de restaurá-los."
+      "title": "Tem certeza de que deseja excluir esta visão?",
+      "content": "Se você confirmar, todas as opções de classificação, filtro e exibição + o layout que você escolheu para esta visão serão excluídos permanentemente sem nenhuma maneira de restaurá-los."
     }
   },
   "project_issues": {
     "empty_state": {
       "no_issues": {
-        "title": "Crie um item de trabalho e atribua-o a alguém, mesmo a você mesmo",
-        "description": "Pense nos itens de trabalho como tarefas, trabalhos ou JTBD. O que nós gostamos. Um item de trabalho e seus subitens de trabalho são geralmente acionáveis ​​baseados no tempo atribuídos aos membros de sua equipe. Sua equipe cria, atribui e conclui itens de trabalho para mover seu projeto em direção à sua meta.",
+        "title": "Crie uma tarefa e atribua-o a alguém, mesmo a você mesmo",
+        "description": "Pense nas tarefas como tarefas, trabalhos ou JTBD. O que nós gostamos. Uma tarefa e seus subtarefas são geralmente acionáveis ​​baseados no tempo atribuídos aos membros de sua equipe. Sua equipe cria, atribui e conclui tarefas para mover seu projeto em direção à sua meta.",
         "primary_button": {
-          "text": "Crie seu primeiro item de trabalho",
+          "text": "Crie sua primeira tarefa",
           "comic": {
-            "title": "Os itens de trabalho são blocos de construção no Plane.",
-            "description": "Redesenhar a interface do usuário do Plane, reformular a marca da empresa ou lançar o novo sistema de injeção de combustível são exemplos de itens de trabalho que provavelmente têm subitens de trabalho."
+            "title": "As tarefas são blocos de construção no Marketing Suite.",
+            "description": "Redesenhar a interface do Marketing Suite, reformular a marca da empresa ou lançar o novo sistema de injeção de combustível são exemplos de tarefas que provavelmente têm subtarefas."
           }
         }
       },
       "no_archived_issues": {
-        "title": "Nenhum item de trabalho arquivado ainda",
-        "description": "Manualmente ou por meio de automação, você pode arquivar itens de trabalho que foram concluídos ou cancelados. Encontre-os aqui quando forem arquivados.",
+        "title": "Nenhuma tarefa arquivada ainda",
+        "description": "Manualmente ou por meio de automação, você pode arquivar tarefas que foram concluídos ou cancelados. Encontre-os aqui quando forem arquivados.",
         "primary_button": {
           "text": "Definir automação"
         }
       },
       "issues_empty_filter": {
-        "title": "Nenhum item de trabalho encontrado correspondendo aos filtros aplicados",
+        "title": "Nenhuma tarefa encontrado correspondendo aos filtros aplicados",
         "secondary_button": {
           "text": "Limpar todos os filtros"
         }
@@ -216,16 +216,16 @@
     }
   },
   "project_module": {
-    "add_module": "Adicionar Módulo",
-    "update_module": "Atualizar Módulo",
-    "create_module": "Criar Módulo",
-    "archive_module": "Arquivar Módulo",
-    "restore_module": "Restaurar Módulo",
+    "add_module": "Adicionar módulo",
+    "update_module": "Atualizar módulo",
+    "create_module": "Criar módulo",
+    "archive_module": "Arquivar módulo",
+    "restore_module": "Restaurar módulo",
     "delete_module": "Excluir módulo",
     "empty_state": {
       "general": {
         "title": "Mapeie os marcos do seu projeto para Módulos e rastreie o trabalho agregado facilmente.",
-        "description": "Um grupo de itens de trabalho que pertencem a um pai lógico e hierárquico forma um módulo. Pense neles como uma forma de rastrear o trabalho por marcos do projeto. Eles têm seus próprios períodos e prazos, bem como análises para ajudá-lo a ver o quão perto ou longe você está de um marco.",
+        "description": "Um grupo de tarefas que pertencem a um pai lógico e hierárquico forma um módulo. Pense neles como uma forma de rastrear o trabalho por marcos do projeto. Eles têm seus próprios períodos e prazos, bem como análises para ajudá-lo a ver o quão perto ou longe você está de um marco.",
         "primary_button": {
           "text": "Construa seu primeiro módulo",
           "comic": {
@@ -235,13 +235,13 @@
         }
       },
       "no_issues": {
-        "title": "Nenhum item de trabalho no módulo",
-        "description": "Crie ou adicione itens de trabalho que você deseja realizar como parte deste módulo",
+        "title": "Nenhuma tarefa no módulo",
+        "description": "Crie ou adicione tarefas que você deseja realizar como parte deste módulo",
         "primary_button": {
-          "text": "Criar novos itens de trabalho"
+          "text": "Criar novas tarefas"
         },
         "secondary_button": {
-          "text": "Adicionar um item de trabalho existente"
+          "text": "Adicionar uma tarefa existente"
         }
       },
       "archived": {
@@ -250,7 +250,7 @@
       },
       "sidebar": {
         "in_active": "Este módulo ainda não está ativo.",
-        "invalid_date": "Data inválida. Por favor, insira uma data válida."
+        "invalid_date": "Data inválida., insira uma data válida."
       }
     },
     "quick_actions": {
@@ -263,7 +263,7 @@
         "success": "Link do módulo copiado para a área de transferência"
       },
       "delete": {
-        "success": "Módulo excluído com sucesso",
+        "success": "Módulo excluído",
         "error": "Falha ao excluir o módulo"
       }
     }
@@ -271,8 +271,8 @@
   "project_page": {
     "empty_state": {
       "general": {
-        "title": "Escreva uma nota, um documento ou uma base de conhecimento completa. Peça a Galileo, o assistente de IA do Plane, para ajudá-lo a começar",
-        "description": "As páginas são espaço para registrar pensamentos no Plane. Anote notas de reunião, formate-as facilmente, incorpore itens de trabalho, organize-os usando uma biblioteca de componentes e mantenha-os todos no contexto do seu projeto. Para facilitar qualquer documento, invoque Galileo, a IA do Plane, com um atalho ou o clique de um botão.",
+        "title": "Escreva uma nota, um documento ou uma base de conhecimento completa. Peça a Galileo, o assistente de IA do Marketing Suite, para ajudá-lo a começar",
+        "description": "As páginas são espaço para registrar pensamentos no Marketing Suite. Anote notas de reunião, formate-as facilmente, incorpore tarefas, organize-os usando uma biblioteca de componentes e mantenha-os todos no contexto do seu projeto. Para facilitar qualquer documento, invoque Galileo, a IA do Marketing Suite, com um atalho ou o clique de um botão.",
         "primary_button": {
           "text": "Crie sua primeira página"
         }
@@ -300,8 +300,8 @@
   "disabled_project": {
     "empty_state": {
       "inbox": {
-        "title": "A Admissão não está habilitado para o projeto.",
-        "description": "A Admissão ajuda você a gerenciar as solicitações recebidas para o seu projeto e adicioná-las como itens de trabalho em seu fluxo de trabalho. Habilite a admissão nas configurações do projeto para gerenciar as solicitações.",
+        "title": "A solicitação não está habilitada para o projeto.",
+        "description": "A Solicitação ajuda você a gerenciar as solicitações recebidas para o seu projeto e adicioná-las como tarefas em seu fluxo de trabalho. Habilite a solicitação nas configurações do projeto para gerenciar as solicitações.",
         "primary_button": {
           "text": "Gerenciar funcionalidades"
         }
@@ -328,8 +328,8 @@
         }
       },
       "view": {
-        "title": "As visualizações não estão habilitadas para o projeto.",
-        "description": "As visualizações são os blocos de construção do seu projeto. Habilite as visualizações nas configurações do projeto para começar a usá-las.",
+        "title": "As visões não estão habilitadas para o projeto.",
+        "description": "As visões são os blocos de construção do seu projeto. Habilite as visões nas configurações do projeto para começar a usá-las.",
         "primary_button": {
           "text": "Gerenciar funcionalidades"
         }
@@ -340,7 +340,7 @@
     "status": {
       "backlog": "Backlog",
       "planned": "Planejado",
-      "in_progress": "Em Andamento",
+      "in_progress": "Em andamento",
       "paused": "Pausado",
       "completed": "Concluído",
       "cancelled": "Cancelado"
@@ -353,8 +353,8 @@
     "order_by": {
       "name": "Nome",
       "progress": "Progresso",
-      "issues": "Número de itens de trabalho",
-      "due_date": "Data de vencimento",
+      "issues": "Número de tarefas",
+      "due_date": "Data de entrega",
       "created_at": "Data de criação",
       "manual": "Manual"
     }
@@ -369,12 +369,12 @@
   "project": {
     "members_import": {
       "title": "Importar membros do CSV",
-      "description": "Carregue um CSV com colunas: Email e Função (5=Convidado, 15=Membro, 20=Admin). Os usuários já devem ser membros do espaço de trabalho.",
+      "description": "Carregue um CSV com colunas: Email e Função (5=Convidado, 15=Membro, 20=Admin). Os pessoas já devem ser membros do espaço de trabalho.",
       "download_sample": "Baixar CSV de exemplo",
       "dropzone": {
         "active": "Solte o arquivo CSV aqui",
         "inactive": "Arraste e solte ou clique para fazer upload",
-        "file_type": "Apenas arquivos .csv são suportados"
+        "file_type": "Apenas arquivos.csv são suportados"
       },
       "buttons": {
         "cancel": "Cancelar",
@@ -392,7 +392,7 @@
           "complete": "Importação concluída"
         },
         "message": {
-          "success": "{count} membr{plural} importad{plural} com sucesso para o projeto.",
+          "success": "{count, plural, one {# membro importado para o projeto.} other {# membros importados para o projeto.}}",
           "no_imports": "Nenhum novo membro foi importado do arquivo CSV."
         },
         "stats": {

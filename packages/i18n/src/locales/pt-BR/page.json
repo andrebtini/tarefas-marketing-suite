@@ -44,32 +44,32 @@
     },
     "toasts": {
       "errors": {
-        "wrong_name": "O nome da nota adesiva não pode ter mais de 100 caracteres.",
-        "already_exists": "Já existe uma nota adesiva sem descrição"
+        "wrong_name": "O nome da anotação não pode ter mais de 100 caracteres.",
+        "already_exists": "Já existe uma anotação sem descrição"
       },
       "created": {
-        "title": "Nota adesiva criada",
-        "message": "A nota adesiva foi criada com sucesso"
+        "title": "Anotação criada",
+        "message": "A anotação foi criada"
       },
       "not_created": {
-        "title": "Nota adesiva não criada",
-        "message": "A nota adesiva não pôde ser criada"
+        "title": "Anotação não criada",
+        "message": "A anotação não pôde ser criada"
       },
       "updated": {
-        "title": "Nota adesiva atualizada",
-        "message": "A nota adesiva foi atualizada com sucesso"
+        "title": "Anotação atualizada",
+        "message": "A anotação foi atualizada"
       },
       "not_updated": {
-        "title": "Nota adesiva não atualizada",
-        "message": "A nota adesiva não pôde ser atualizada"
+        "title": "Anotação não atualizada",
+        "message": "A anotação não pôde ser atualizada"
       },
       "removed": {
-        "title": "Nota adesiva removida",
-        "message": "A nota adesiva foi removida com sucesso"
+        "title": "Anotação removida",
+        "message": "A anotação foi removida"
       },
       "not_removed": {
-        "title": "Nota adesiva não removida",
-        "message": "A nota adesiva não pôde ser removida"
+        "title": "Anotação não removida",
+        "message": "A anotação não pôde ser removida"
       }
     },
     "open_button": "Abrir painel de navegação",
@@ -93,11 +93,11 @@
       },
       "toasts": {
         "success": {
-          "title": "Sucesso!",
-          "message": "Página movida com sucesso."
+          "title": "Pronto.",
+          "message": "Página movida."
         },
         "error": {
-          "title": "Erro!",
+          "title": "Erro.",
           "message": "Não foi possível mover a página. Tente novamente mais tarde."
         },
         "collection_error": {

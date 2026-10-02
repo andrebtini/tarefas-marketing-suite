@@ -870,7 +870,12 @@
   },
   "ms": {
     "common": {
-      "guia_interno": "Internal guide"
+      "guia_interno": "Internal guide",
+      "saudacao": {
+        "manha": "Good morning",
+        "tarde": "Good afternoon",
+        "noite": "Good evening"
+      }
     }
   }
 }
